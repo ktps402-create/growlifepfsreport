@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>靠過來探索者分部回報系統 (後台)</title>
+    <style>
+        :root {
+            --bg-color: #f7f5f2;
+            --main-brown: #7a5a4a; 
+            --tab-active: #c49a7c; 
+            --tab-inactive: #8b6b5d; 
+            --text-dark: #6a5344;
+            --text-light: #ffffff;
+            --box-bg: #ece9e4; 
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            font-size: 110%; 
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px; 
+        }
+
+        .header {
+            background-color: var(--main-brown);
+            color: var(--text-light);
+            text-align: center;
+            padding: 25px 0;
+            border-radius: var(--border-radius);
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .password-box {
+            background-color: var(--box-bg);
+            padding: 40px;
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin-top: 50px;
+        }
+
+        .input-med {
+            padding: 10px 12px;
+            border-radius: 4px;
+            border: 1px solid #dcd7d1;
+            font-size: 1em;
+            width: 200px;
+        }
+        
+        .input-eq {
+            padding: 10px 12px;
+            border-radius: 4px;
+            border: 1px solid #dcd7d1;
+            font-size: 1em;
+            width: 130px;
+            background-color: var(--input-bg);
+            color: var(--text-dark);
+        }
+
+        .submit-btn {
+            background-color: var(--main-brown);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+.stats-grid-annual {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 調整為 4 欄 */
+    gap: 15px;
+    margin-bottom: 15px;
+}
+        .stats-grid-annual-bottom {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background-color: var(--box-bg);
+            padding: 20px 10px;
+            text-align: center;
+            border-radius: var(--border-radius);
+        }
+
+        .stat-title {
+            font-size: 0.95em;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .stat-num {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--main-brown);
+        }
+
+        .table-section {
+            margin-bottom: 50px;
+        }
+
+        /* 主分頁樣式 */
+        .main-tabs {
+            display: flex;
+            gap: 5px;
+            border-bottom: 3px solid var(--tab-inactive);
+            margin-bottom: 25px;
+        }
+
+        .main-tab-btn {
+            background-color: var(--tab-inactive);
+            color: var(--text-light);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .main-tab-btn.active {
+            background-color: var(--main-brown);
+        }
+
+        .main-tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .main-tab-content.active {
+            display: block;
+        }
+
+        /* 次分頁樣式 */
+        .sub-tabs {
+            display: flex;
+            align-items: flex-end;
+            border-bottom: 4px solid var(--tab-active); 
+        }
+
+        .sub-tab-btn {
+            background-color: var(--tab-inactive);
+            color: var(--text-light);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 12px 12px 0 0;
+            transition: 0.3s;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .sub-tab-btn.active {
+            background-color: var(--tab-active);
+        }
+
+        .sub-tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .sub-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+            background-color: #ffffff;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--main-brown);
+        }
+
+        td {
+            border-bottom: 1px solid #dcd7d1; 
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #fdfdfc;
+        }
+
+        .scenario-list { line-height: 1.6; }
+        .scenario-item { display: flex; gap: 15px; }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .status-confirmed { background-color: #d4e2d4; color: #4a7c59; }
+        .status-pending { background-color: #fce4d6; color: #c47b57; margin-bottom: 8px; }
+
+        .action-btn {
+            background-color: var(--main-brown);
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: 0.2s;
+            display: block;
+        }
+
+        .action-btn:hover { background-color: #5c4337; }
+        .action-btn:active { transform: scale(0.95); }
+        .loading-text { text-align: center; font-weight: bold; color: var(--main-brown); padding: 40px; }
+        
+        .section-header {
+            color: var(--main-brown);
+            border-bottom: 2px dashed #c49a7c;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .notes-text {
+            background-color: #fdfaf6;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: var(--main-brown);
+            border-left: 3px solid var(--tab-active);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">靠過來探索者分部回報系統 (後台)</div>
+
+    <div id="password-gate" class="password-box">
+        <h3 style="margin-top: 0; color: var(--main-brown);">系統管理後台</h3>
+        <p style="font-size: 0.9em; margin-bottom: 20px;">請輸入管理員密碼以載入系統資料</p>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+            <input type="password" id="gatePassword" class="input-med" placeholder="請輸入密碼" onkeypress="if(event.key === 'Enter') verifyAdmin()">
+            <button class="submit-btn" id="login-btn" onclick="verifyAdmin()">登入後台</button>
+        </div>
+    </div>
+
+    <div id="admin-dashboard" style="display: none;">
+        
+        <input type="hidden" id="verifiedPassword">
+
+        <div class="main-tabs">
+            <button class="main-tab-btn active" onclick="openMainTab(event, 'main-management')">團務審核</button>
+            <button class="main-tab-btn" onclick="openMainTab(event, 'main-rewards')">獎勵名單</button>
+            <button class="main-tab-btn" onclick="openMainTab(event, 'main-annual')">年度報表</button>
+        </div>
+
+        <div id="main-management" class="main-tab-content active">
+            <div class="stats-grid">
+                <div class="stat-box"><div class="stat-title">本月PFS總人次</div><div class="stat-num" id="stat-people">0</div></div>
+                <div class="stat-box"><div class="stat-title">本月PFS總團數</div><div class="stat-num" id="stat-sessions">0</div></div>
+                <div class="stat-box"><div class="stat-title">本月PFS新手人數</div><div class="stat-num" id="stat-newbies">0</div></div>
+                <div class="stat-box"><div class="stat-title">本月領獎達成人數</div><div class="stat-num" id="stat-bonus">0</div></div>
+            </div>
+
+            <div class="table-section">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" onclick="openSubTab(event, 'report-this-month', 'report-tab')">本月團務紀錄</button>
+                    <button class="sub-tab-btn" onclick="openSubTab(event, 'report-last-month', 'report-tab')">上月團務紀錄</button>
+                </div>
+                
+                <div id="report-this-month" class="sub-tab-content active report-tab">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>團務日期</th>
+                                <th>GM PFSID</th>
+                                <th>劇本編號</th>
+                                <th>玩家編號列表</th>
+                                <th>狀態</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-this-body">
+                            <tr><td colspan="5" class="loading-text">資料讀取中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="report-last-month" class="sub-tab-content report-tab">
+                    <table>
+                        <thead><tr><th>團務日期</th><th>GM PFSID</th><th>劇本編號</th><th>玩家編號列表</th><th>狀態</th></tr></thead>
+                        <tbody id="report-last-body">
+                            <tr><td colspan="5" class="loading-text">資料讀取中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="main-rewards" class="main-tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #c49a7c; padding-bottom: 10px; margin-bottom: 20px;">
+                <h2 style="color: var(--main-brown); margin: 0;">結算獎勵名單</h2>
+            </div>
+            
+            <div class="table-section">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" onclick="openSubTab(event, 'reward-this-month', 'reward-tab')">本月獎勵名單</button>
+                    <button class="sub-tab-btn" onclick="openSubTab(event, 'reward-last-month', 'reward-tab')">上月獎勵名單</button>
+                </div>
+                
+                <div id="reward-this-month" class="sub-tab-content active reward-tab">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">PFSID</th>
+                                <th style="width: 25%;">達成項目</th>
+                                <th style="width: 55%;">參與/觸發劇本</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reward-this-body">
+                            <tr><td colspan="3" class="loading-text">資料讀取中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="reward-last-month" class="sub-tab-content reward-tab">
+                    <table>
+                        <thead><tr><th>PFSID</th><th>達成項目</th><th>參與/觸發劇本</th></tr></thead>
+                        <tbody id="reward-last-body">
+                            <tr><td colspan="3" class="loading-text">資料讀取中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="main-annual" class="main-tab-content">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #c49a7c; padding-bottom: 10px; margin-bottom: 20px;">
+                <h2 style="color: var(--main-brown); margin: 0;">Paizo 官方回報數據</h2>
+                <select id="reportYearSelect" class="input-eq" style="font-weight: bold; font-size: 1.05em; background-color: white;" onchange="updateAnnualView()">
+                </select>
+            </div>
+            
+            <div class="table-section">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" onclick="openSubTab(event, 'annual-stats-view', 'annual-tab')">年度統計</button>
+                    <button class="sub-tab-btn" onclick="openSubTab(event, 'monthly-stats-view', 'annual-tab')">每月統計</button>
+                </div>
+                
+<div id="annual-stats-view" class="sub-tab-content active annual-tab">
+    <div style="background-color: #ffffff; padding: 20px; border-radius: 0 0 8px 8px;">
+        <div class="stats-grid-annual">
+            <div class="stat-box">
+                <div class="stat-title">年度 Scenarios 總數</div>
+                <div class="stat-num" id="annual-scenarios">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">年度 Quests & Bounties</div>
+                <div class="stat-num" id="annual-qb">0</div>
+            </div>
+            <!-- 新增：其他劇本 -->
+            <div class="stat-box">
+                <div class="stat-title">年度其他劇本總數</div>
+                <div class="stat-num" id="annual-others">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">帶團 GM 總人數</div>
+                <div class="stat-num" id="annual-gms">0</div>
+            </div>
+        </div>
+        <div class="stats-grid-annual-bottom">
+            <div class="stat-box">
+                <div class="stat-title">參與玩家總人數</div>
+                <div class="stat-num" id="annual-players">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">「新」玩家總人數</div>
+                <div class="stat-num" id="annual-newbies">0</div>
+            </div>
+        </div>
+    </div>
+</div>
+                <div id="monthly-stats-view" class="sub-tab-content annual-tab">
+                    <table>
+<thead>
+    <tr>
+        <th>月份</th>
+        <th>Scenarios</th>
+        <th>Quests / Bounties</th>
+        <th>其他劇本</th> <!-- 新增欄位 -->
+        <th>出勤 GM 數</th>
+        <th>參與玩家數</th>
+        <th>新玩家數</th>
+    </tr>
+</thead>
+<tbody id="monthly-stats-body">
+    <tr><td colspan="7" class="loading-text">資料讀取中...</td></tr>
+</tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbygWWPFj63EttlBcM64FdOuSPZq95Qb1k_MmHDHCW6BwU4zAzboX01QtqKA5fYNViR7DA/exec"; // 請替換為您的正式網址
+
+    window.allReportsData = [];
+
+    function openMainTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("main-tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("active");
+        }
+        tablinks = document.getElementsByClassName("main-tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.className += " active";
+    }
+
+    function openSubTab(evt, tabName, tabGroupClass) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName(tabGroupClass);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("active");
+        }
+        var parentTabs = evt.currentTarget.parentElement;
+        tablinks = parentTabs.getElementsByClassName("sub-tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.className += " active";
+    }
+
+    async function verifyAdmin() {
+        const pwd = document.getElementById('gatePassword').value.trim();
+        if (!pwd) return alert('請輸入密碼！');
+
+        const btn = document.getElementById('login-btn');
+        btn.innerText = "驗證中...";
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "verifyPassword", password: pwd })
+            });
+            const result = await response.json();
+
+            if (result.status === "success") {
+                document.getElementById('password-gate').style.display = 'none';
+                document.getElementById('admin-dashboard').style.display = 'block';
+                document.getElementById('verifiedPassword').value = pwd;
+                
+                loadAllDashboardData();
+            } else {
+                alert("密碼錯誤！");
+                btn.innerText = "登入後台";
+                btn.disabled = false;
+            }
+        } catch (error) {
+            alert("連線失敗，請檢查網路。");
+            btn.innerText = "登入後台";
+            btn.disabled = false;
+        }
+    }
+
+    async function loadAllDashboardData() {
+        try {
+            const response = await fetch(`${GAS_URL}?action=getAllReports`);
+            const result = await response.json();
+
+            if (result.status === "success") {
+                window.allReportsData = result.data;
+                populateYearSelect();
+                renderManagementAndRewards();
+                updateAnnualView();
+            } else {
+                alert("讀取資料失敗：" + result.message);
+            }
+        } catch (error) {
+            alert("讀取資料發生錯誤，請檢查網路。");
+        }
+    }
+
+    function renderManagementAndRewards() {
+        const rows = window.allReportsData;
+        const today = new Date();
+        const curM = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0');
+        const lmDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const lastM = lmDate.getFullYear() + "-" + String(lmDate.getMonth() + 1).padStart(2, '0');
+
+        let stats = { people: 0, sessions: 0, newbies: 0, bonus: 0 };
+        
+        let playerStatsCur = {}; 
+        let playerStatsLast = {};
+        let playerNewbiesCur = [];
+        let playerNewbiesLast = [];
+        let reportHtmlCur = "";
+        let reportHtmlLast = "";
+
+        // 為了計算 10, 25, 100 場的累積紀錄，我們建立時間軸
+        let playerTimelines = {};
+
+        // 1. 先用正序建立玩家出勤時間軸 (含月份資訊)
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            const rawDate = new Date(row[1]);
+            if (isNaN(rawDate.getTime())) continue;
+
+            const rMonthStr = rawDate.getFullYear() + "-" + String(rawDate.getMonth() + 1).padStart(2, '0');
+            const rCode = row[2];
+            let players = [];
+            try { players = JSON.parse(row[5]); } catch(e){}
+
+            players.forEach(p => {
+                const pid = String(p.p_id).trim();
+                if (pid) {
+                    if (!playerTimelines[pid]) playerTimelines[pid] = [];
+                    playerTimelines[pid].push({ monthStr: rMonthStr, scenario: rCode });
+                }
+            });
+        }
+
+        // 2. 判斷是否在這個月達標里程碑
+        let curMMilestones = [];
+        let lastMMilestones = [];
+        Object.keys(playerTimelines).forEach(pid => {
+            const runs = playerTimelines[pid];
+            if (runs.length >= 10) {
+                let mRun = runs[9];
+                if (mRun.monthStr === curM) curMMilestones.push({ p_id: pid, title: "累計 10 次任務", scenario: mRun.scenario });
+                if (mRun.monthStr === lastM) lastMMilestones.push({ p_id: pid, title: "累計 10 次任務", scenario: mRun.scenario });
+            }
+            if (runs.length >= 25) {
+                let mRun = runs[24];
+                if (mRun.monthStr === curM) curMMilestones.push({ p_id: pid, title: "累計 25 次任務", scenario: mRun.scenario });
+                if (mRun.monthStr === lastM) lastMMilestones.push({ p_id: pid, title: "累計 25 次任務", scenario: mRun.scenario });
+            }
+            if (runs.length >= 100) {
+                let mRun = runs[99];
+                if (mRun.monthStr === curM) curMMilestones.push({ p_id: pid, title: "累計 100 次任務", scenario: mRun.scenario });
+                if (mRun.monthStr === lastM) lastMMilestones.push({ p_id: pid, title: "累計 100 次任務", scenario: mRun.scenario });
+            }
+        });
+
+        // 3. 倒序生成團務清單與計算每月 4 場
+        for (let i = rows.length - 1; i >= 1; i--) {
+            const row = rows[i];
+            const rId = row[0];
+            const rawDate = new Date(row[1]);
+            if (isNaN(rawDate.getTime())) continue;
+
+            const rDateStr = rawDate.getFullYear() + "." + String(rawDate.getMonth() + 1).padStart(2, '0') + "." + String(rawDate.getDate()).padStart(2, '0');
+            const rMonthStr = rawDate.getFullYear() + "-" + String(rawDate.getMonth() + 1).padStart(2, '0');
+            const rCode = row[2];
+            const gmId = String(row[4]).trim();
+            
+            let players = [];
+            try { players = JSON.parse(row[5]); } catch(e){}
+            const newbieCount = parseInt(row[6]) || 0;
+            const status = row[7];
+            const notes = row[9] ? String(row[9]) : ""; 
+
+            let playersHtml = players.map(p => `<div>${p.p_id} - ${p.c_id} ${p.newbie ? '<span style="color:#c47b57;font-size:0.8em;font-weight:bold;">(新手)</span>' : ''}</div>`).join('');
+            if(!playersHtml) playersHtml = "無玩家資料";
+
+            let notesHtml = notes ? `<div class="notes-text">備註：${notes}</div>` : "";
+
+            let statusHtml = "";
+            if (status === "Confirmed") {
+                statusHtml = `<div class="status-badge status-confirmed">已回報</div>`;
+            } else {
+                statusHtml = `
+                    <div class="status-badge status-pending">待回報</div>
+                    <button class="action-btn" onclick="confirmReport('${rId}')">確認回報</button>
+                `;
+            }
+
+            const trHtml = `
+                <tr>
+                    <td>${rDateStr}</td>
+                    <td>${gmId}</td>
+                    <td>${rCode}</td>
+                    <td>
+                        <div style="color: #a8948a; cursor: pointer; user-select: none;" onclick="togglePlayers('plist-${rId}')" id="btn-plist-${rId}">點擊顯示明細 ▼</div>
+                        <div id="plist-${rId}" style="display: none; margin-top: 10px; border-top: 1px dashed #d1ccc5; padding-top: 10px; line-height: 1.5;">
+                            ${notesHtml}
+                            ${playersHtml}
+                        </div>
+                    </td>
+                    <td id="status-cell-${rId}">${statusHtml}</td>
+                </tr>
+            `;
+
+            if (rMonthStr === curM) {
+                reportHtmlCur += trHtml;
+                stats.sessions++;
+                stats.people += players.length;
+                stats.newbies += newbieCount;
+
+                players.forEach(p => { 
+                    const pid = String(p.p_id).trim();
+                    if (pid) {
+                        if (!playerStatsCur[pid]) playerStatsCur[pid] = { count: 0, scenarios: [] };
+                        playerStatsCur[pid].count++;
+                        playerStatsCur[pid].scenarios.push(rCode);
+                    }
+                    if(p.newbie) playerNewbiesCur.push({ p_id: pid, scenario: rCode }); 
+                });
+            } 
+            else if (rMonthStr === lastM) {
+                reportHtmlLast += trHtml;
+                
+                players.forEach(p => { 
+                    const pid = String(p.p_id).trim();
+                    if (pid) {
+                        if (!playerStatsLast[pid]) playerStatsLast[pid] = { count: 0, scenarios: [] };
+                        playerStatsLast[pid].count++;
+                        playerStatsLast[pid].scenarios.push(rCode);
+                    }
+                    if(p.newbie) playerNewbiesLast.push({ p_id: pid, scenario: rCode }); 
+                });
+            }
+        }
+
+        document.getElementById('report-this-body').innerHTML = reportHtmlCur || '<tr><td colspan="5" style="text-align: center;">無本月資料</td></tr>';
+        document.getElementById('report-last-body').innerHTML = reportHtmlLast || '<tr><td colspan="5" style="text-align: center;">無上月資料</td></tr>';
+
+        // 彙整並渲染本月獎勵
+        let rewardsCur = [];
+        Object.keys(playerStatsCur).forEach(id => {
+            if (playerStatsCur[id].count >= 4) rewardsCur.push({ p_id: id, title: "每月 4 場", scenarios: playerStatsCur[id].scenarios });
+        });
+        playerNewbiesCur.forEach(pn => rewardsCur.push({ p_id: pn.p_id, title: "新手獎勵", scenarios: [pn.scenario] }));
+        curMMilestones.forEach(ms => rewardsCur.push({ p_id: ms.p_id, title: ms.title, scenarios: [ms.scenario] }));
+        
+        // 彙整並渲染上月獎勵
+        let rewardsLast = [];
+        Object.keys(playerStatsLast).forEach(id => {
+            if (playerStatsLast[id].count >= 4) rewardsLast.push({ p_id: id, title: "每月 4 場", scenarios: playerStatsLast[id].scenarios });
+        });
+        playerNewbiesLast.forEach(pn => rewardsLast.push({ p_id: pn.p_id, title: "新手獎勵", scenarios: [pn.scenario] }));
+        lastMMilestones.forEach(ms => rewardsLast.push({ p_id: ms.p_id, title: ms.title, scenarios: [ms.scenario] }));
+
+        stats.bonus = renderRewardsList(rewardsCur, 'reward-this-body');
+        renderRewardsList(rewardsLast, 'reward-last-body');
+
+        document.getElementById('stat-people').innerText = stats.people;
+        document.getElementById('stat-sessions').innerText = stats.sessions;
+        document.getElementById('stat-newbies').innerText = stats.newbies;
+        document.getElementById('stat-bonus').innerText = stats.bonus;
+    }
+
+    function renderRewardsList(rewardsArray, targetElementId) {
+        let rewardHtml = "";
+        let uniquePeople = new Set();
+
+        rewardsArray.forEach(r => {
+            uniquePeople.add(r.p_id);
+            const scenListHtml = r.scenarios.map(s => `<div class="scenario-item">${s}</div>`).join('');
+            rewardHtml += `<tr><td>${r.p_id}</td><td>${r.title}</td><td class="scenario-list">${scenListHtml}</td></tr>`;
+        });
+
+        document.getElementById(targetElementId).innerHTML = rewardHtml || '<tr><td colspan="3" style="text-align: center;">無符合條件之名單</td></tr>';
+        return uniquePeople.size; // 統計有獲得任何獎勵的「不重複玩家人數」
+    }
+
+    function populateYearSelect() {
+        let years = new Set();
+        for(let i = 1; i < window.allReportsData.length; i++) {
+            let date = new Date(window.allReportsData[i][1]);
+            if(!isNaN(date.getTime())) years.add(date.getFullYear());
+        }
+        let yearArr = Array.from(years).sort((a,b) => b - a); 
+        if(yearArr.length === 0) yearArr = [new Date().getFullYear()]; 
+        
+        let select = document.getElementById('reportYearSelect');
+        select.innerHTML = yearArr.map(y => `<option value="${y}">${y} 年</option>`).join('');
+    }
+
+window.updateAnnualView = function() {
+    const year = parseInt(document.getElementById('reportYearSelect').value);
+    if(!year) return;
+
+    // 擴充 annualStats 加入 others
+    let annualStats = { scenario: 0, questBounty: 0, others: 0, gms: new Set(), players: new Set(), newbies: new Set() };
+    let monthlyStats = {};
+    for(let i=1; i<=12; i++) {
+        monthlyStats[i] = { scenario: 0, questBounty: 0, others: 0, gms: new Set(), players: new Set(), newbies: new Set() };
+    }
+
+    for (let i = 1; i < window.allReportsData.length; i++) {
+        const row = window.allReportsData[i];
+        const rawDate = new Date(row[1]);
+        if (isNaN(rawDate.getTime()) || rawDate.getFullYear() !== year) continue;
+
+        const month = rawDate.getMonth() + 1;
+        const code = row[2] ? String(row[2]).toLowerCase() : "";
+        const gmId = String(row[4]).trim();
+        
+        let players = [];
+        try { players = JSON.parse(row[5]); } catch(e){}
+
+        let isScenario = code.includes("scenario");
+        let isQuestBounty = code.includes("quest") || code.includes("bounty");
+
+        if(isScenario) { 
+            annualStats.scenario++; 
+            monthlyStats[month].scenario++; 
+        } else if(isQuestBounty) { 
+            annualStats.questBounty++; 
+            monthlyStats[month].questBounty++; 
+        } else { 
+            // 兩者皆非，歸類為其他
+            annualStats.others++; 
+            monthlyStats[month].others++; 
+        }
+
+        if (gmId) {
+            annualStats.gms.add(gmId);
+            monthlyStats[month].gms.add(gmId);
+        }
+
+        players.forEach(p => {
+            const pid = String(p.p_id).trim();
+            if(pid) {
+                annualStats.players.add(pid);
+                monthlyStats[month].players.add(pid);
+                if(p.newbie) {
+                    annualStats.newbies.add(pid);
+                    monthlyStats[month].newbies.add(pid);
+                }
+            }
+        });
+    }
+
+    // 渲染年度數據
+    document.getElementById('annual-scenarios').innerText = annualStats.scenario;
+    document.getElementById('annual-qb').innerText = annualStats.questBounty;
+    document.getElementById('annual-others').innerText = annualStats.others; // 渲染其他
+    document.getElementById('annual-gms').innerText = annualStats.gms.size;
+    document.getElementById('annual-players').innerText = annualStats.players.size;
+    document.getElementById('annual-newbies').innerText = annualStats.newbies.size;
+
+    // 渲染每月表格
+    let monthlyHtml = "";
+    for(let m = 12; m >= 1; m--) {
+        let ms = monthlyStats[m];
+        if(ms.scenario > 0 || ms.questBounty > 0 || ms.others > 0) { 
+            monthlyHtml += `
+                <tr>
+                    <td><strong>${m} 月</strong></td>
+                    <td>${ms.scenario}</td>
+                    <td>${ms.questBounty}</td>
+                    <td>${ms.others}</td> <!-- 渲染每月其他 -->
+                    <td>${ms.gms.size}</td>
+                    <td>${ms.players.size}</td>
+                    <td>${ms.newbies.size}</td>
+                </tr>
+            `;
+        }
+    }
+    document.getElementById('monthly-stats-body').innerHTML = monthlyHtml || '<tr><td colspan="7" style="text-align:center;">該年度尚無資料</td></tr>';
+}
+    window.togglePlayers = function(listId) {
+        const listDiv = document.getElementById(listId);
+        const btnText = document.getElementById('btn-' + listId);
+        if (listDiv.style.display === 'none') {
+            listDiv.style.display = 'block';
+            btnText.innerText = '隱藏明細 ▲';
+            btnText.style.color = 'var(--main-brown)';
+        } else {
+            listDiv.style.display = 'none';
+            btnText.innerText = '點擊顯示明細 ▼';
+            btnText.style.color = '#a8948a';
+        }
+    }
+
+    window.confirmReport = async function(reportId) {
+        if (!confirm("確定要將此團務標記為「已回報」嗎？")) return;
+
+        const pwd = document.getElementById('verifiedPassword').value;
+        const cell = document.getElementById(`status-cell-${reportId}`);
+        cell.innerHTML = '<span style="font-size:0.85em; color:var(--main-brown);">處理中...</span>';
+
+        try {
+            const response = await fetch(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "confirmReport", reportId: reportId, password: pwd })
+            });
+
+            const result = await response.json();
+
+            if (result.status === "success") {
+                cell.innerHTML = `<div class="status-badge status-confirmed">已回報</div>`;
+                const reportRow = window.allReportsData.find(r => r[0] === reportId);
+                if (reportRow) reportRow[7] = "Confirmed";
+            } else {
+                alert("更新失敗：" + result.message);
+                loadAllDashboardData(); 
+            }
+        } catch (error) {
+            alert("連線發生錯誤！");
+            loadAllDashboardData(); 
+        }
+    }
+</script>
+</body>
+</html>
