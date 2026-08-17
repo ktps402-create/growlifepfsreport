@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>靠過來探索者分部回報系統</title>
+    <style>
+        :root {
+            --bg-color: #f7f5f2;
+            --main-brown: #7a5a4a;
+            --tab-inactive: #b79c8d;
+            --text-dark: #7a5a4a; 
+            --text-light: #ffffff;
+            --input-bg: #e6e3df;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, 'Microsoft JhengHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            font-size: 130%; 
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px; 
+        }
+
+        input, select, button {
+            font-family: inherit;
+        }
+
+        ::placeholder {
+            color: #a8948a;
+            opacity: 0.7; 
+        }
+
+        .header {
+            background-color: var(--main-brown);
+            color: var(--text-light);
+            text-align: center;
+            padding: 25px 0;
+            border-radius: var(--border-radius);
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            border-bottom: 3px solid var(--tab-inactive);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background-color: var(--tab-inactive);
+            color: var(--text-light);
+            border: none;
+            padding: 10px 25px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background-color: var(--main-brown);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            background-color: var(--main-brown);
+            color: var(--text-light);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        button.section-title {
+            border: none;
+            cursor: pointer;
+            margin: 0;
+            font-size: 0.9em;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .form-label {
+            width: 105px; 
+            font-weight: bold;
+            color: var(--text-dark);
+            flex-shrink: 0;
+        }
+
+        input[type="text"], input[type="password"], input[type="date"], select {
+            background-color: var(--input-bg);
+            border: none; 
+            outline: none;
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 1em;
+            color: var(--text-dark);
+        }
+        
+        .input-short { width: 90px; }
+        .input-eq { width: 130px; } 
+        .input-med { width: 180px; }
+        .input-long { width: 100%; max-width: 400px; }
+
+        .player-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.2em;
+            height: 1.2em;
+            background-color: #ffffff; 
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            margin: 0;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: var(--main-brown); 
+        }
+
+        .submit-btn {
+            background-color: var(--main-brown);
+            color: var(--text-light);
+            border: none;
+            padding: 12px 40px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 30px 0 0 auto;
+        }
+
+        .submit-btn:hover {
+            background-color: #5c4337;
+        }
+
+        .search-box, .password-box {
+            background-color: #ebe7e1;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .dashboard-card {
+            background-color: #ebe7e1;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            background-color: var(--tab-inactive); 
+            color: white;
+            padding: 8px 15px; 
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-right: 15px;
+            display: inline-block; 
+            width: 140px; 
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 15px;
+        }
+
+        th {
+            font-weight: bold;
+            color: var(--text-dark);
+            padding: 0 12px;
+            border: none;
+            text-align: left; 
+        }
+
+        td {
+            padding: 15px 12px;
+            border: none;
+            text-align: left;
+            vertical-align: top; 
+        }
+
+        tbody tr {
+            background-color: var(--bg-color);
+            transition: all 0.3s ease;
+        }
+
+        tbody td:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        
+        tbody td:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .section-divider {
+            border-top: 2px dashed #d1ccc5;
+            margin: 40px 0 20px 0;
+            padding-top: 30px;
+        }
+        
+        .status-badge-sm {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .status-confirmed-sm { background-color: #d4e2d4; color: #4a7c59; }
+        .status-pending-sm { background-color: #fce4d6; color: #c47b57; }
+        
+        .notes-text {
+            background-color: #fdfaf6;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: var(--main-brown);
+            border-left: 3px solid var(--tab-active);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">靠過來探索者分部回報系統</div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'tab-report')">團務回報</button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-history')">本月回報紀錄</button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-search')">跑團紀錄查詢</button>
+    </div>
+
+    <!-- Tab 1: 團務回報 -->
+    <div id="tab-report" class="tab-content active">
+        
+        <div id="password-gate" class="password-box">
+            <h3 style="margin-top: 0; color: var(--main-brown);">🔒 團務回報系統</h3>
+            <p style="font-size: 0.85em; margin-bottom: 20px;">本區域僅限 GM 填寫，請輸入您的專屬密碼以解鎖表單</p>
+            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                <input type="password" id="gatePassword" class="input-med" placeholder="請輸入GM密碼" style="background-color: #ffffff;" onkeypress="if(event.key === 'Enter') verifyGMPassword()">
+                <button class="section-title" onclick="verifyGMPassword()">驗證並進入</button>
+            </div>
+        </div>
+
+        <div id="report-form-wrapper" style="display: none;">
+            <div class="section-title">團務資訊</div>
+            <div class="form-row">
+                <div class="form-label">團務日期</div>
+                <input type="date" id="sessionDate">
+            </div>
+            <div class="form-row">
+                <div class="form-label">劇本編號</div>
+                <select id="scenarioTypeSelect" class="input-eq" onchange="onScenarioTypeChange()">
+                    <option value="">讀取類型中...</option>
+                </select>
+                <select id="scenarioNumSelect" class="input-eq">
+                    <option value="">請先選類型</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-label">GM PFS ID</div>
+                <input type="text" id="gmId" class="input-med" placeholder="PFS ID">
+            </div>
+            <div class="form-row">
+                <div class="form-label">回報註記</div>
+                <input type="text" id="reportNotes" class="input-long" placeholder="例如：選項A、或積分給角色 -2">
+            </div>
+            
+            <input type="hidden" id="verifiedPassword">
+
+            <div class="section-title">玩家角色</div>
+            <div id="players-container"></div>
+            <button class="submit-btn" onclick="submitForm()">送出回報</button>
+        </div>
+    </div>
+
+    <!-- Tab 2: 本月回報紀錄 -->
+    <div id="tab-history" class="tab-content">
+        <div class="dashboard-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>團務日期</th>
+                        <th>GM PFSID</th>
+                        <th>劇本編號</th>
+                        <th>玩家編號列表</th>
+                        <th>Paizo 回報狀態</th>
+                    </tr>
+                </thead>
+                <tbody id="history-table-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tab 3: 跑團紀錄查詢 -->
+    <div id="tab-search" class="tab-content">
+        <div class="search-box">
+            <div class="form-row" style="margin-bottom: 0;">
+                <div class="form-label" style="width: auto; margin-right: 10px;">請輸入您的 PFS ID</div>
+                <input type="text" id="searchPfsId" class="input-med" placeholder="PFS ID" style="background-color: #ffffff;" onkeypress="if(event.key === 'Enter') searchRecords()">
+                <button class="section-title" onclick="searchRecords()">查詢</button>
+            </div>
+        </div>
+
+        <div class="dashboard-card" id="search-results" style="display: none;">
+            <h3 style="margin-top:0; display:flex; align-items:center; gap:10px;">
+                <span>PFS ID : <span id="res-id"></span></span>
+                <!-- 新增累計場次成就標籤 -->
+                <span id="res-milestone-tag" style="display:none; font-size:0.65em; background-color:var(--main-brown); color:white; padding:4px 10px; border-radius:12px;"></span>
+                <span id="res-newbie-tag" style="display:none; font-size:0.65em; background-color:#c49a7c; color:white; padding:4px 10px; border-radius:12px;">新手獎勵(已獲取)</span>
+            </h3>
+            <div id="stats-container" style="display: flex; flex-direction: column; gap: 20px; margin: 30px 0;"></div>
+            <div class="section-divider">
+                <div class="section-title" style="margin-top: 0;">本月參團紀錄</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>團務日期</th>
+                            <th>GM PFSID</th>
+                            <th>參團角色</th>
+                            <th>劇本編號</th>
+                            <th>Paizo 回報狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody id="search-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx7eG9a30xK_i_A1O8S7KxH1H7O6vW6uWp3O9q2I_X8L7pG4k8B9E_5_N2n-eX5E4pG/exec"; // 請替換成您專屬的 Google Apps Script 網址
+
+    let groupedScenarios = {};
+
+    const playersContainer = document.getElementById('players-container');
+    for (let i = 1; i <= 6; i++) {
+        const row = document.createElement('div');
+        row.className = 'player-row';
+        row.innerHTML = `
+            <div class="form-label">玩家#0${i}</div>
+            <input type="text" class="input-med" placeholder="PFS ID">
+            <span>-</span>
+            <input type="text" class="input-short" placeholder="角色碼">
+            <label class="checkbox-label" style="margin-left: 15px;">
+                <input type="checkbox"> 新手獎勵
+            </label>
+        `;
+        playersContainer.appendChild(row);
+    }
+
+    window.onload = function() {
+        loadScenarios();
+    };
+
+    async function loadScenarios() {
+        try {
+            const response = await fetch(`${GAS_URL}?action=getScenarios`);
+            const result = await response.json();
+            const typeSelect = document.getElementById('scenarioTypeSelect');
+            
+            if (result.status === "success") {
+                groupedScenarios = {};
+                result.scenarios.forEach(scen => {
+                    const firstSpaceIndex = scen.indexOf(' ');
+                    if (firstSpaceIndex !== -1) {
+                        const type = scen.substring(0, firstSpaceIndex).trim();
+                        const num = scen.substring(firstSpaceIndex + 1).trim();
+                        if (!groupedScenarios[type]) groupedScenarios[type] = [];
+                        groupedScenarios[type].push(num);
+                    }
+                });
+
+                typeSelect.innerHTML = '<option value="">請選擇類型...</option>';
+                Object.keys(groupedScenarios).forEach(type => {
+                    typeSelect.innerHTML += `<option value="${type}">${type}</option>`;
+                });
+                document.getElementById('scenarioNumSelect').innerHTML = '<option value="">請先選擇類型</option>';
+            } else {
+                typeSelect.innerHTML = '<option value="">載入失敗</option>';
+            }
+        } catch (error) {
+            document.getElementById('scenarioTypeSelect').innerHTML = '<option value="">無法連線</option>';
+        }
+    }
+
+    window.onScenarioTypeChange = function() {
+        const typeSelectValue = document.getElementById('scenarioTypeSelect').value;
+        const numSelect = document.getElementById('scenarioNumSelect');
+        numSelect.innerHTML = '<option value="">請選擇編號...</option>';
+        if (typeSelectValue && groupedScenarios[typeSelectValue]) {
+            groupedScenarios[typeSelectValue].forEach(num => {
+                numSelect.innerHTML += `<option value="${num}">${num}</option>`;
+            });
+        }
+    }
+
+    window.openTab = function(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("active");
+        }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.className += " active";
+
+        if (tabName === 'tab-history') {
+            loadMonthlyReports();
+        }
+    }
+
+    window.verifyGMPassword = async function() {
+        const pwd = document.getElementById('gatePassword').value.trim();
+        if (!pwd) return alert('請輸入 GM 專屬密碼！');
+
+        const btn = document.querySelector('#password-gate .section-title');
+        const originalText = btn.innerText;
+        btn.innerText = "驗證中...";
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "verifyPassword", password: pwd })
+            });
+            const result = await response.json();
+
+            if (result.status === "success") {
+                document.getElementById('password-gate').style.display = 'none';
+                document.getElementById('report-form-wrapper').style.display = 'block';
+                document.getElementById('verifiedPassword').value = pwd;
+            } else {
+                alert(result.message); 
+            }
+        } catch (error) {
+            alert("❌ 驗證失敗，請檢查網路連線。");
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    async function loadMonthlyReports() {
+        const tbody = document.getElementById('history-table-body');
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-dark);">資料讀取中... ⏳</td></tr>';
+
+        try {
+            const response = await fetch(`${GAS_URL}?action=getMonthlyReports`);
+            const result = await response.json();
+
+            if (result.status === "success") {
+                tbody.innerHTML = "";
+                if (result.reports.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">本月目前尚無回報紀錄</td></tr>';
+                    return;
+                }
+                result.reports.forEach((report, index) => {
+                    let playersHtml = '';
+                    try {
+                        const players = JSON.parse(report.players);
+                        playersHtml = players.map(p => `
+                            <div style="margin-bottom: 8px;">
+                                ${p.p_id} - ${p.c_id} 
+                                ${p.newbie ? '<span style="font-size: 0.8em; color: var(--main-brown); font-weight: bold; margin-left: 5px;">(新手)</span>' : ''}
+                            </div>
+                        `).join('');
+                    } catch(e) {}
+
+                    const statusHtml = report.status === 'Confirmed' 
+                        ? '<span class="status-badge-sm status-confirmed-sm">已回報</span>'
+                        : '<span class="status-badge-sm status-pending-sm">未回報</span>';
+                        
+                    const notesHtml = report.notes ? `<div class="notes-text">備註：${report.notes}</div>` : '';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${report.date}</td>
+                        <td>${report.gmId}</td>
+                        <td>${report.scenarioCode}</td>
+                        <td>
+                            <div style="color: #a8948a; cursor: pointer; user-select: none;" onclick="togglePlayers('plist-${index}')" id="btn-plist-${index}">
+                                點擊顯示明細 ▼
+                            </div>
+                            <div id="plist-${index}" style="display: none; margin-top: 15px; border-top: 1px dashed #d1ccc5; padding-top: 15px; color: var(--text-dark);">
+                                ${notesHtml}
+                                ${playersHtml || '無玩家資料'}
+                            </div>
+                        </td>
+                        <td>${statusHtml}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">讀取失敗：${result.message}</td></tr>`;
+            }
+        } catch (error) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">發生錯誤，請檢查網路連線。</td></tr>';
+        }
+    }
+
+    window.togglePlayers = function(listId) {
+        const listDiv = document.getElementById(listId);
+        const btnText = document.getElementById('btn-' + listId);
+        if (listDiv.style.display === 'none') {
+            listDiv.style.display = 'block';
+            btnText.innerText = '隱藏明細 ▲';
+            btnText.style.color = 'var(--main-brown)';
+        } else {
+            listDiv.style.display = 'none';
+            btnText.innerText = '點擊顯示明細 ▼';
+            btnText.style.color = '#a8948a';
+        }
+    }
+
+    window.searchRecords = async function() {
+        const id = document.getElementById('searchPfsId').value.trim();
+        if(!id) return alert('請輸入 PFS ID 來進行查詢喔！');
+
+        const searchBtn = document.querySelector('#tab-search .section-title');
+        const originalBtnText = searchBtn.innerText;
+        searchBtn.innerText = "查詢中...";
+        searchBtn.disabled = true;
+
+        try {
+            const response = await fetch(`${GAS_URL}?action=searchPlayer&id=${id}`);
+            const result = await response.json();
+
+            if (result.status === "success") {
+                document.getElementById('search-results').style.display = 'block';
+                document.getElementById('res-id').innerText = result.targetId;
+                
+                // 新手獎勵標籤
+                if (result.hasNewbieReward) {
+                    document.getElementById('res-newbie-tag').style.display = 'inline-block';
+                } else {
+                    document.getElementById('res-newbie-tag').style.display = 'none';
+                }
+                
+                // 累計場次成就標籤
+                const milestoneTag = document.getElementById('res-milestone-tag');
+                if (result.totalCount >= 100) {
+                    milestoneTag.innerText = "達成 100 場任務";
+                    milestoneTag.style.display = 'inline-block';
+                } else if (result.totalCount >= 25) {
+                    milestoneTag.innerText = "達成 25 場任務";
+                    milestoneTag.style.display = 'inline-block';
+                } else if (result.totalCount >= 10) {
+                    milestoneTag.innerText = "達成 10 場任務";
+                    milestoneTag.style.display = 'inline-block';
+                } else {
+                    milestoneTag.style.display = 'none';
+                }
+                
+                const statsContainer = document.getElementById('stats-container');
+                let progressText = result.monthlyCount >= 4 
+                    ? "🎉 太棒了！已達成當月 Bonus 門檻！" 
+                    : `*加油！還差 ${4 - result.monthlyCount} 場即可達成當月 Bonus 門檻！`;
+                
+                statsContainer.innerHTML = `
+                    <div><span class="badge">本月 Bonus</span> <strong>${result.monthlyCount} / 4</strong> <span style="font-size: 0.85em; color: #888; margin-left: 10px;">${progressText}</span></div>
+                    <div><span class="badge">累計跑團場次</span> <strong>${result.totalCount}</strong></div>
+                    <div><span class="badge">累計帶團次數</span> <strong>${result.totalGM}</strong></div>
+                `;
+
+                const tbody = document.querySelector('#search-table-body');
+                tbody.innerHTML = "";
+                
+                if (result.reports.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">目前還沒有找到您的紀錄喔！</td></tr>`;
+                } else {
+                    result.reports.forEach(report => {
+                        const statusHtml = report.status === 'Confirmed' 
+                            ? '<span class="status-badge-sm status-confirmed-sm">已回報</span>'
+                            : '<span class="status-badge-sm status-pending-sm">未回報</span>';
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${report.date}</td>
+                            <td>${report.gmId}</td>
+                            <td>${report.characterId}</td>
+                            <td>${report.scenarioCode}</td>
+                            <td>${statusHtml}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } else {
+                alert("❌ 查詢失敗：" + result.message);
+            }
+        } catch (error) {
+            alert("❌ 發生錯誤，請檢查網路連線或稍後再試。");
+        } finally {
+            searchBtn.innerText = originalBtnText;
+            searchBtn.disabled = false;
+        }
+    }
+
+    window.submitForm = async function() {
+        const sessionDate = document.getElementById('sessionDate').value;
+        const typeSelect = document.getElementById('scenarioTypeSelect').value;
+        const numSelect = document.getElementById('scenarioNumSelect').value;
+        const gmId = document.getElementById('gmId').value; 
+        const gmPassword = document.getElementById('verifiedPassword').value; 
+        const notes = document.getElementById('reportNotes').value.trim();
+
+        if (!sessionDate || !gmId || !typeSelect || !numSelect) {
+            return alert("⚠️ 請確實填寫「團務日期」、「劇本類型/編號」與「GM PFS ID」喔！");
+        }
+
+        const fullScenarioCode = typeSelect + " " + numSelect;
+        const players = [];
+        let newbieCount = 0;
+        const playerRows = document.querySelectorAll('.player-row');
+
+        playerRows.forEach(row => {
+            const inputs = row.querySelectorAll('input[type="text"]');
+            const checkbox = row.querySelector('input[type="checkbox"]');
+            const playerId = inputs[0].value.trim();
+            const charCode = inputs[1].value.trim();
+            const isNewbie = checkbox.checked;
+
+            if (playerId) {
+                players.push({
+                    p_id: playerId,
+                    c_id: charCode,
+                    newbie: isNewbie
+                });
+                if (isNewbie) newbieCount++;
+            }
+        });
+
+        const formData = {
+            action: "submitReport",
+            sessionDate: sessionDate,
+            scenarioCode: fullScenarioCode, 
+            scenarioName: "", 
+            gmId: gmId,
+            password: gmPassword, 
+            players: players,
+            newbieCount: newbieCount,
+            notes: notes
+        };
+
+        const submitBtn = document.querySelector('.submit-btn');
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.innerText = "資料傳送中...";
+        submitBtn.disabled = true;
+
+        try {
+            const response = await fetch(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (result.status === "success") {
+                alert("🎉 團務回報成功！資料已成功寫入您的 Google Sheet。\n您可以繼續填寫下一筆回報。");
+                
+                document.getElementById('sessionDate').value = '';
+                document.getElementById('scenarioTypeSelect').value = '';
+                document.getElementById('scenarioNumSelect').innerHTML = '<option value="">請先選擇類型</option>';
+                document.getElementById('gmId').value = ''; 
+                document.getElementById('reportNotes').value = ''; 
+                
+                const playerRows = document.querySelectorAll('.player-row');
+                playerRows.forEach(row => {
+                    const inputs = row.querySelectorAll('input[type="text"]');
+                    const checkbox = row.querySelector('input[type="checkbox"]');
+                    inputs[0].value = '';
+                    inputs[1].value = '';
+                    checkbox.checked = false;
+                });
+            } else {
+                alert("❌ 回報失敗：" + result.message);
+            }
+        } catch (error) {
+            alert("❌ 發生錯誤，請檢查網路連線或稍後再試。");
+        } finally {
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
