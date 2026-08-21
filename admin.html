@@ -36,9 +36,9 @@
             background-color: var(--main-brown);
             color: var(--text-light);
             text-align: center;
-            padding: 25px 0;
+            padding: 20px 10px;
             border-radius: var(--border-radius);
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: bold;
             margin-bottom: 20px;
             letter-spacing: 2px;
@@ -46,7 +46,7 @@
 
         .password-box {
             background-color: var(--box-bg);
-            padding: 40px;
+            padding: 30px;
             text-align: center;
             border-radius: var(--border-radius);
             margin-top: 50px;
@@ -57,7 +57,8 @@
             border-radius: 4px;
             border: 1px solid #dcd7d1;
             font-size: 1em;
-            width: 200px;
+            width: 100%;
+            max-width: 200px;
         }
         
         .input-eq {
@@ -79,21 +80,22 @@
             font-size: 1em;
             cursor: pointer;
             font-weight: bold;
+            margin-top: 10px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-bottom: 30px;
         }
         
-.stats-grid-annual {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 調整為 4 欄 */
-    gap: 15px;
-    margin-bottom: 15px;
-}
+        .stats-grid-annual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
         .stats-grid-annual-bottom {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -125,69 +127,66 @@
             margin-bottom: 50px;
         }
 
-        /* 主分頁樣式 */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .main-tabs {
             display: flex;
             gap: 5px;
             border-bottom: 3px solid var(--tab-inactive);
             margin-bottom: 25px;
+            flex-wrap: wrap;
         }
 
         .main-tab-btn {
             background-color: var(--tab-inactive);
             color: var(--text-light);
             border: none;
-            padding: 12px 30px;
+            padding: 12px 20px;
             font-size: 1.1em;
             cursor: pointer;
             border-radius: 10px 10px 0 0;
             transition: 0.3s;
             font-weight: bold;
+            flex: 1;
+            text-align: center;
+            min-width: 100px;
         }
 
-        .main-tab-btn.active {
-            background-color: var(--main-brown);
-        }
+        .main-tab-btn.active { background-color: var(--main-brown); }
+        .main-tab-content { display: none; animation: fadeIn 0.5s; }
+        .main-tab-content.active { display: block; }
 
-        .main-tab-content {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        .main-tab-content.active {
-            display: block;
-        }
-
-        /* 次分頁樣式 */
         .sub-tabs {
             display: flex;
             align-items: flex-end;
             border-bottom: 4px solid var(--tab-active); 
+            flex-wrap: wrap;
         }
 
         .sub-tab-btn {
             background-color: var(--tab-inactive);
             color: var(--text-light);
             border: none;
-            padding: 10px 20px;
-            font-size: 1em;
+            padding: 10px 15px;
+            font-size: 0.95em;
             cursor: pointer;
             border-radius: 12px 12px 0 0;
             transition: 0.3s;
             font-weight: bold;
             margin-right: 5px;
+            margin-top: 5px;
+            flex: 1;
+            text-align: center;
+            min-width: 120px;
         }
 
-        .sub-tab-btn.active {
-            background-color: var(--tab-active);
-        }
-
-        .sub-tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        .sub-tab-content.active {
-            display: block;
-        }
+        .sub-tab-btn.active { background-color: var(--tab-active); }
+        .sub-tab-content { display: none; animation: fadeIn 0.3s; }
+        .sub-tab-content.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -200,31 +199,26 @@
             margin-top: 0;
             background-color: #ffffff;
             border-radius: 0 0 8px 8px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 15px 20px;
-            text-align: left;
-            vertical-align: top;
+            min-width: 600px; 
         }
 
         th {
             font-weight: bold;
             color: var(--text-dark);
-            border-bottom: 1px solid var(--main-brown);
+            padding: 10px 15px;
+            border-bottom: 2px solid var(--main-brown);
+            text-align: left;
+            white-space: nowrap;
         }
 
         td {
+            padding: 15px 15px;
             border-bottom: 1px solid #dcd7d1; 
+            text-align: left;
+            vertical-align: top;
         }
 
-        tbody tr:nth-child(even) {
-            background-color: #fdfdfc;
-        }
-
-        .scenario-list { line-height: 1.6; }
-        .scenario-item { display: flex; gap: 15px; }
+        tbody tr { transition: all 0.3s ease; }
 
         .status-badge {
             padding: 5px 12px;
@@ -233,6 +227,7 @@
             font-weight: bold;
             display: inline-block;
             text-align: center;
+            white-space: nowrap;
         }
 
         .status-confirmed { background-color: #d4e2d4; color: #4a7c59; }
@@ -249,6 +244,7 @@
             font-weight: bold;
             transition: 0.2s;
             display: block;
+            white-space: nowrap;
         }
 
         .action-btn:hover { background-color: #5c4337; }
@@ -271,6 +267,14 @@
             color: var(--main-brown);
             border-left: 3px solid var(--tab-active);
         }
+
+        @media (max-width: 768px) {
+            .stats-grid-annual { grid-template-columns: 1fr 1fr; }
+            .stats-grid, .stats-grid-annual-bottom { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid-annual, .stats-grid, .stats-grid-annual-bottom { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -281,7 +285,7 @@
     <div id="password-gate" class="password-box">
         <h3 style="margin-top: 0; color: var(--main-brown);">系統管理後台</h3>
         <p style="font-size: 0.9em; margin-bottom: 20px;">請輸入管理員密碼以載入系統資料</p>
-        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 20px;">
             <input type="password" id="gatePassword" class="input-med" placeholder="請輸入密碼" onkeypress="if(event.key === 'Enter') verifyAdmin()">
             <button class="submit-btn" id="login-btn" onclick="verifyAdmin()">登入後台</button>
         </div>
@@ -293,7 +297,6 @@
 
         <div class="main-tabs">
             <button class="main-tab-btn active" onclick="openMainTab(event, 'main-management')">團務審核</button>
-            <button class="main-tab-btn" onclick="openMainTab(event, 'main-rewards')">獎勵名單</button>
             <button class="main-tab-btn" onclick="openMainTab(event, 'main-annual')">年度報表</button>
         </div>
 
@@ -301,8 +304,6 @@
             <div class="stats-grid">
                 <div class="stat-box"><div class="stat-title">本月PFS總人次</div><div class="stat-num" id="stat-people">0</div></div>
                 <div class="stat-box"><div class="stat-title">本月PFS總團數</div><div class="stat-num" id="stat-sessions">0</div></div>
-                <div class="stat-box"><div class="stat-title">本月PFS新手人數</div><div class="stat-num" id="stat-newbies">0</div></div>
-                <div class="stat-box"><div class="stat-title">本月領獎達成人數</div><div class="stat-num" id="stat-bonus">0</div></div>
             </div>
 
             <div class="table-section">
@@ -312,74 +313,41 @@
                 </div>
                 
                 <div id="report-this-month" class="sub-tab-content active report-tab">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>團務日期</th>
-                                <th>GM PFSID</th>
-                                <th>劇本編號</th>
-                                <th>玩家編號列表</th>
-                                <th>狀態</th>
-                            </tr>
-                        </thead>
-                        <tbody id="report-this-body">
-                            <tr><td colspan="5" class="loading-text">資料讀取中...</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>團務日期</th>
+                                    <th>GM PFSID</th>
+                                    <th>劇本編號</th>
+                                    <th>狀態</th>
+                                    <th>玩家編號列表</th>
+                                </tr>
+                            </thead>
+                            <tbody id="report-this-body">
+                                <tr><td colspan="5" class="loading-text">資料讀取中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div id="report-last-month" class="sub-tab-content report-tab">
-                    <table>
-                        <thead><tr><th>團務日期</th><th>GM PFSID</th><th>劇本編號</th><th>玩家編號列表</th><th>狀態</th></tr></thead>
-                        <tbody id="report-last-body">
-                            <tr><td colspan="5" class="loading-text">資料讀取中...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="main-rewards" class="main-tab-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #c49a7c; padding-bottom: 10px; margin-bottom: 20px;">
-                <h2 style="color: var(--main-brown); margin: 0;">結算獎勵名單</h2>
-            </div>
-            
-            <div class="table-section">
-                <div class="sub-tabs">
-                    <button class="sub-tab-btn active" onclick="openSubTab(event, 'reward-this-month', 'reward-tab')">本月獎勵名單</button>
-                    <button class="sub-tab-btn" onclick="openSubTab(event, 'reward-last-month', 'reward-tab')">上月獎勵名單</button>
-                </div>
-                
-                <div id="reward-this-month" class="sub-tab-content active reward-tab">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 20%;">PFSID</th>
-                                <th style="width: 25%;">達成項目</th>
-                                <th style="width: 55%;">參與/觸發劇本</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reward-this-body">
-                            <tr><td colspan="3" class="loading-text">資料讀取中...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="reward-last-month" class="sub-tab-content reward-tab">
-                    <table>
-                        <thead><tr><th>PFSID</th><th>達成項目</th><th>參與/觸發劇本</th></tr></thead>
-                        <tbody id="reward-last-body">
-                            <tr><td colspan="3" class="loading-text">資料讀取中...</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>團務日期</th><th>GM PFSID</th><th>劇本編號</th><th>狀態</th><th>玩家編號列表</th></tr></thead>
+                            <tbody id="report-last-body">
+                                <tr><td colspan="5" class="loading-text">資料讀取中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="main-annual" class="main-tab-content">
             
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #c49a7c; padding-bottom: 10px; margin-bottom: 20px;">
-                <h2 style="color: var(--main-brown); margin: 0;">Paizo 官方回報數據</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #c49a7c; padding-bottom: 10px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h2 style="color: var(--main-brown); margin: 0; font-size: 1.2em;">Paizo 官方回報數據</h2>
                 <select id="reportYearSelect" class="input-eq" style="font-weight: bold; font-size: 1.05em; background-color: white;" onchange="updateAnnualView()">
                 </select>
             </div>
@@ -390,56 +358,53 @@
                     <button class="sub-tab-btn" onclick="openSubTab(event, 'monthly-stats-view', 'annual-tab')">每月統計</button>
                 </div>
                 
-<div id="annual-stats-view" class="sub-tab-content active annual-tab">
-    <div style="background-color: #ffffff; padding: 20px; border-radius: 0 0 8px 8px;">
-        <div class="stats-grid-annual">
-            <div class="stat-box">
-                <div class="stat-title">年度 Scenarios 總數</div>
-                <div class="stat-num" id="annual-scenarios">0</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-title">年度 Quests & Bounties</div>
-                <div class="stat-num" id="annual-qb">0</div>
-            </div>
-            <!-- 新增：其他劇本 -->
-            <div class="stat-box">
-                <div class="stat-title">年度其他劇本總數</div>
-                <div class="stat-num" id="annual-others">0</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-title">帶團 GM 總人數</div>
-                <div class="stat-num" id="annual-gms">0</div>
-            </div>
-        </div>
-        <div class="stats-grid-annual-bottom">
-            <div class="stat-box">
-                <div class="stat-title">參與玩家總人數</div>
-                <div class="stat-num" id="annual-players">0</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-title">「新」玩家總人數</div>
-                <div class="stat-num" id="annual-newbies">0</div>
-            </div>
-        </div>
-    </div>
-</div>
+                <div id="annual-stats-view" class="sub-tab-content active annual-tab">
+                    <div style="background-color: #ffffff; padding: 20px; border-radius: 0 0 8px 8px;">
+                        <div class="stats-grid-annual">
+                            <div class="stat-box">
+                                <div class="stat-title">年度 Scenarios 總數</div>
+                                <div class="stat-num" id="annual-scenarios">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-title">年度 Quests & Bounties</div>
+                                <div class="stat-num" id="annual-qb">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-title">年度其他劇本總數</div>
+                                <div class="stat-num" id="annual-others">0</div>
+                            </div>
+                        </div>
+                        <div class="stats-grid-annual-bottom">
+                            <div class="stat-box">
+                                <div class="stat-title">帶團 GM 總人數</div>
+                                <div class="stat-num" id="annual-gms">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-title">參與玩家總人數</div>
+                                <div class="stat-num" id="annual-players">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="monthly-stats-view" class="sub-tab-content annual-tab">
-                    <table>
-<thead>
-    <tr>
-        <th>月份</th>
-        <th>Scenarios</th>
-        <th>Quests / Bounties</th>
-        <th>其他劇本</th> <!-- 新增欄位 -->
-        <th>出勤 GM 數</th>
-        <th>參與玩家數</th>
-        <th>新玩家數</th>
-    </tr>
-</thead>
-<tbody id="monthly-stats-body">
-    <tr><td colspan="7" class="loading-text">資料讀取中...</td></tr>
-</tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>月份</th>
+                                    <th>Scenarios</th>
+                                    <th>Quests / Bounties</th>
+                                    <th>其他劇本</th>
+                                    <th>出勤 GM 數</th>
+                                    <th>參與玩家數</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthly-stats-body">
+                                <tr><td colspan="6" class="loading-text">資料讀取中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -544,61 +509,10 @@
         const lmDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
         const lastM = lmDate.getFullYear() + "-" + String(lmDate.getMonth() + 1).padStart(2, '0');
 
-        let stats = { people: 0, sessions: 0, newbies: 0, bonus: 0 };
-        
-        let playerStatsCur = {}; 
-        let playerStatsLast = {};
-        let playerNewbiesCur = [];
-        let playerNewbiesLast = [];
+        let stats = { people: 0, sessions: 0 };
         let reportHtmlCur = "";
         let reportHtmlLast = "";
 
-        // 為了計算 10, 25, 100 場的累積紀錄，我們建立時間軸
-        let playerTimelines = {};
-
-        // 1. 先用正序建立玩家出勤時間軸 (含月份資訊)
-        for (let i = 1; i < rows.length; i++) {
-            const row = rows[i];
-            const rawDate = new Date(row[1]);
-            if (isNaN(rawDate.getTime())) continue;
-
-            const rMonthStr = rawDate.getFullYear() + "-" + String(rawDate.getMonth() + 1).padStart(2, '0');
-            const rCode = row[2];
-            let players = [];
-            try { players = JSON.parse(row[5]); } catch(e){}
-
-            players.forEach(p => {
-                const pid = String(p.p_id).trim();
-                if (pid) {
-                    if (!playerTimelines[pid]) playerTimelines[pid] = [];
-                    playerTimelines[pid].push({ monthStr: rMonthStr, scenario: rCode });
-                }
-            });
-        }
-
-        // 2. 判斷是否在這個月達標里程碑
-        let curMMilestones = [];
-        let lastMMilestones = [];
-        Object.keys(playerTimelines).forEach(pid => {
-            const runs = playerTimelines[pid];
-            if (runs.length >= 10) {
-                let mRun = runs[9];
-                if (mRun.monthStr === curM) curMMilestones.push({ p_id: pid, title: "累計 10 次任務", scenario: mRun.scenario });
-                if (mRun.monthStr === lastM) lastMMilestones.push({ p_id: pid, title: "累計 10 次任務", scenario: mRun.scenario });
-            }
-            if (runs.length >= 25) {
-                let mRun = runs[24];
-                if (mRun.monthStr === curM) curMMilestones.push({ p_id: pid, title: "累計 25 次任務", scenario: mRun.scenario });
-                if (mRun.monthStr === lastM) lastMMilestones.push({ p_id: pid, title: "累計 25 次任務", scenario: mRun.scenario });
-            }
-            if (runs.length >= 100) {
-                let mRun = runs[99];
-                if (mRun.monthStr === curM) curMMilestones.push({ p_id: pid, title: "累計 100 次任務", scenario: mRun.scenario });
-                if (mRun.monthStr === lastM) lastMMilestones.push({ p_id: pid, title: "累計 100 次任務", scenario: mRun.scenario });
-            }
-        });
-
-        // 3. 倒序生成團務清單與計算每月 4 場
         for (let i = rows.length - 1; i >= 1; i--) {
             const row = rows[i];
             const rId = row[0];
@@ -612,11 +526,10 @@
             
             let players = [];
             try { players = JSON.parse(row[5]); } catch(e){}
-            const newbieCount = parseInt(row[6]) || 0;
             const status = row[7];
             const notes = row[9] ? String(row[9]) : ""; 
 
-            let playersHtml = players.map(p => `<div>${p.p_id} - ${p.c_id} ${p.newbie ? '<span style="color:#c47b57;font-size:0.8em;font-weight:bold;">(新手)</span>' : ''}</div>`).join('');
+            let playersHtml = players.map(p => `<div>${p.p_id} - ${p.c_id}</div>`).join('');
             if(!playersHtml) playersHtml = "無玩家資料";
 
             let notesHtml = notes ? `<div class="notes-text">備註：${notes}</div>` : "";
@@ -631,93 +544,42 @@
                 `;
             }
 
-            const trHtml = `
+            const tr1 = `
                 <tr>
                     <td>${rDateStr}</td>
                     <td>${gmId}</td>
                     <td>${rCode}</td>
-                    <td>
-                        <div style="color: #a8948a; cursor: pointer; user-select: none;" onclick="togglePlayers('plist-${rId}')" id="btn-plist-${rId}">點擊顯示明細 ▼</div>
-                        <div id="plist-${rId}" style="display: none; margin-top: 10px; border-top: 1px dashed #d1ccc5; padding-top: 10px; line-height: 1.5;">
-                            ${notesHtml}
-                            ${playersHtml}
-                        </div>
-                    </td>
                     <td id="status-cell-${rId}">${statusHtml}</td>
+                    <td>
+                        <div style="color: #a8948a; cursor: pointer; user-select: none;" onclick="togglePlayers('plist-${rId}')" id="btn-plist-${rId}">展開 ▼</div>
+                    </td>
+                </tr>
+            `;
+            const tr2 = `
+                <tr id="plist-${rId}" style="display: none;">
+                    <td style="border: none; padding: 0;"></td>
+                    <td colspan="4" style="border: none; padding-top: 0; padding-bottom: 20px; color: var(--text-dark);">
+                        ${notesHtml}
+                        ${playersHtml}
+                    </td>
                 </tr>
             `;
 
             if (rMonthStr === curM) {
-                reportHtmlCur += trHtml;
+                reportHtmlCur += (tr1 + tr2);
                 stats.sessions++;
                 stats.people += players.length;
-                stats.newbies += newbieCount;
-
-                players.forEach(p => { 
-                    const pid = String(p.p_id).trim();
-                    if (pid) {
-                        if (!playerStatsCur[pid]) playerStatsCur[pid] = { count: 0, scenarios: [] };
-                        playerStatsCur[pid].count++;
-                        playerStatsCur[pid].scenarios.push(rCode);
-                    }
-                    if(p.newbie) playerNewbiesCur.push({ p_id: pid, scenario: rCode }); 
-                });
             } 
             else if (rMonthStr === lastM) {
-                reportHtmlLast += trHtml;
-                
-                players.forEach(p => { 
-                    const pid = String(p.p_id).trim();
-                    if (pid) {
-                        if (!playerStatsLast[pid]) playerStatsLast[pid] = { count: 0, scenarios: [] };
-                        playerStatsLast[pid].count++;
-                        playerStatsLast[pid].scenarios.push(rCode);
-                    }
-                    if(p.newbie) playerNewbiesLast.push({ p_id: pid, scenario: rCode }); 
-                });
+                reportHtmlLast += (tr1 + tr2);
             }
         }
 
         document.getElementById('report-this-body').innerHTML = reportHtmlCur || '<tr><td colspan="5" style="text-align: center;">無本月資料</td></tr>';
         document.getElementById('report-last-body').innerHTML = reportHtmlLast || '<tr><td colspan="5" style="text-align: center;">無上月資料</td></tr>';
 
-        // 彙整並渲染本月獎勵
-        let rewardsCur = [];
-        Object.keys(playerStatsCur).forEach(id => {
-            if (playerStatsCur[id].count >= 4) rewardsCur.push({ p_id: id, title: "每月 4 場", scenarios: playerStatsCur[id].scenarios });
-        });
-        playerNewbiesCur.forEach(pn => rewardsCur.push({ p_id: pn.p_id, title: "新手獎勵", scenarios: [pn.scenario] }));
-        curMMilestones.forEach(ms => rewardsCur.push({ p_id: ms.p_id, title: ms.title, scenarios: [ms.scenario] }));
-        
-        // 彙整並渲染上月獎勵
-        let rewardsLast = [];
-        Object.keys(playerStatsLast).forEach(id => {
-            if (playerStatsLast[id].count >= 4) rewardsLast.push({ p_id: id, title: "每月 4 場", scenarios: playerStatsLast[id].scenarios });
-        });
-        playerNewbiesLast.forEach(pn => rewardsLast.push({ p_id: pn.p_id, title: "新手獎勵", scenarios: [pn.scenario] }));
-        lastMMilestones.forEach(ms => rewardsLast.push({ p_id: ms.p_id, title: ms.title, scenarios: [ms.scenario] }));
-
-        stats.bonus = renderRewardsList(rewardsCur, 'reward-this-body');
-        renderRewardsList(rewardsLast, 'reward-last-body');
-
         document.getElementById('stat-people').innerText = stats.people;
         document.getElementById('stat-sessions').innerText = stats.sessions;
-        document.getElementById('stat-newbies').innerText = stats.newbies;
-        document.getElementById('stat-bonus').innerText = stats.bonus;
-    }
-
-    function renderRewardsList(rewardsArray, targetElementId) {
-        let rewardHtml = "";
-        let uniquePeople = new Set();
-
-        rewardsArray.forEach(r => {
-            uniquePeople.add(r.p_id);
-            const scenListHtml = r.scenarios.map(s => `<div class="scenario-item">${s}</div>`).join('');
-            rewardHtml += `<tr><td>${r.p_id}</td><td>${r.title}</td><td class="scenario-list">${scenListHtml}</td></tr>`;
-        });
-
-        document.getElementById(targetElementId).innerHTML = rewardHtml || '<tr><td colspan="3" style="text-align: center;">無符合條件之名單</td></tr>';
-        return uniquePeople.size; // 統計有獲得任何獎勵的「不重複玩家人數」
     }
 
     function populateYearSelect() {
@@ -733,100 +595,84 @@
         select.innerHTML = yearArr.map(y => `<option value="${y}">${y} 年</option>`).join('');
     }
 
-window.updateAnnualView = function() {
-    const year = parseInt(document.getElementById('reportYearSelect').value);
-    if(!year) return;
+    window.updateAnnualView = function() {
+        const year = parseInt(document.getElementById('reportYearSelect').value);
+        if(!year) return;
 
-    // 擴充 annualStats 加入 others
-    let annualStats = { scenario: 0, questBounty: 0, others: 0, gms: new Set(), players: new Set(), newbies: new Set() };
-    let monthlyStats = {};
-    for(let i=1; i<=12; i++) {
-        monthlyStats[i] = { scenario: 0, questBounty: 0, others: 0, gms: new Set(), players: new Set(), newbies: new Set() };
-    }
-
-    for (let i = 1; i < window.allReportsData.length; i++) {
-        const row = window.allReportsData[i];
-        const rawDate = new Date(row[1]);
-        if (isNaN(rawDate.getTime()) || rawDate.getFullYear() !== year) continue;
-
-        const month = rawDate.getMonth() + 1;
-        const code = row[2] ? String(row[2]).toLowerCase() : "";
-        const gmId = String(row[4]).trim();
-        
-        let players = [];
-        try { players = JSON.parse(row[5]); } catch(e){}
-
-        let isScenario = code.includes("scenario");
-        let isQuestBounty = code.includes("quest") || code.includes("bounty");
-
-        if(isScenario) { 
-            annualStats.scenario++; 
-            monthlyStats[month].scenario++; 
-        } else if(isQuestBounty) { 
-            annualStats.questBounty++; 
-            monthlyStats[month].questBounty++; 
-        } else { 
-            // 兩者皆非，歸類為其他
-            annualStats.others++; 
-            monthlyStats[month].others++; 
+        let annualStats = { scenario: 0, questBounty: 0, others: 0, gms: new Set(), players: new Set() };
+        let monthlyStats = {};
+        for(let i=1; i<=12; i++) {
+            monthlyStats[i] = { scenario: 0, questBounty: 0, others: 0, gms: new Set(), players: new Set() };
         }
 
-        if (gmId) {
-            annualStats.gms.add(gmId);
-            monthlyStats[month].gms.add(gmId);
-        }
+        for (let i = 1; i < window.allReportsData.length; i++) {
+            const row = window.allReportsData[i];
+            const rawDate = new Date(row[1]);
+            if (isNaN(rawDate.getTime()) || rawDate.getFullYear() !== year) continue;
 
-        players.forEach(p => {
-            const pid = String(p.p_id).trim();
-            if(pid) {
-                annualStats.players.add(pid);
-                monthlyStats[month].players.add(pid);
-                if(p.newbie) {
-                    annualStats.newbies.add(pid);
-                    monthlyStats[month].newbies.add(pid);
-                }
+            const month = rawDate.getMonth() + 1;
+            const code = row[2] ? String(row[2]).toLowerCase() : "";
+            const gmId = String(row[4]).trim();
+            
+            let players = [];
+            try { players = JSON.parse(row[5]); } catch(e){}
+
+            let isScenario = code.includes("scenario");
+            let isQuestBounty = code.includes("quest") || code.includes("bounty");
+
+            if(isScenario) { annualStats.scenario++; monthlyStats[month].scenario++; }
+            else if(isQuestBounty) { annualStats.questBounty++; monthlyStats[month].questBounty++; }
+            else { annualStats.others++; monthlyStats[month].others++; }
+
+            if (gmId) {
+                annualStats.gms.add(gmId);
+                monthlyStats[month].gms.add(gmId);
             }
-        });
-    }
 
-    // 渲染年度數據
-    document.getElementById('annual-scenarios').innerText = annualStats.scenario;
-    document.getElementById('annual-qb').innerText = annualStats.questBounty;
-    document.getElementById('annual-others').innerText = annualStats.others; // 渲染其他
-    document.getElementById('annual-gms').innerText = annualStats.gms.size;
-    document.getElementById('annual-players').innerText = annualStats.players.size;
-    document.getElementById('annual-newbies').innerText = annualStats.newbies.size;
-
-    // 渲染每月表格
-    let monthlyHtml = "";
-    for(let m = 12; m >= 1; m--) {
-        let ms = monthlyStats[m];
-        if(ms.scenario > 0 || ms.questBounty > 0 || ms.others > 0) { 
-            monthlyHtml += `
-                <tr>
-                    <td><strong>${m} 月</strong></td>
-                    <td>${ms.scenario}</td>
-                    <td>${ms.questBounty}</td>
-                    <td>${ms.others}</td> <!-- 渲染每月其他 -->
-                    <td>${ms.gms.size}</td>
-                    <td>${ms.players.size}</td>
-                    <td>${ms.newbies.size}</td>
-                </tr>
-            `;
+            players.forEach(p => {
+                const pid = String(p.p_id).trim();
+                if(pid) {
+                    annualStats.players.add(pid);
+                    monthlyStats[month].players.add(pid);
+                }
+            });
         }
+
+        document.getElementById('annual-scenarios').innerText = annualStats.scenario;
+        document.getElementById('annual-qb').innerText = annualStats.questBounty;
+        document.getElementById('annual-others').innerText = annualStats.others;
+        document.getElementById('annual-gms').innerText = annualStats.gms.size;
+        document.getElementById('annual-players').innerText = annualStats.players.size;
+
+        let monthlyHtml = "";
+        for(let m = 12; m >= 1; m--) {
+            let ms = monthlyStats[m];
+            if(ms.scenario > 0 || ms.questBounty > 0 || ms.others > 0) { 
+                monthlyHtml += `
+                    <tr>
+                        <td><strong>${m} 月</strong></td>
+                        <td>${ms.scenario}</td>
+                        <td>${ms.questBounty}</td>
+                        <td>${ms.others}</td>
+                        <td>${ms.gms.size}</td>
+                        <td>${ms.players.size}</td>
+                    </tr>
+                `;
+            }
+        }
+        document.getElementById('monthly-stats-body').innerHTML = monthlyHtml || '<tr><td colspan="6" style="text-align:center;">該年度尚無資料</td></tr>';
     }
-    document.getElementById('monthly-stats-body').innerHTML = monthlyHtml || '<tr><td colspan="7" style="text-align:center;">該年度尚無資料</td></tr>';
-}
+
     window.togglePlayers = function(listId) {
         const listDiv = document.getElementById(listId);
         const btnText = document.getElementById('btn-' + listId);
         if (listDiv.style.display === 'none') {
-            listDiv.style.display = 'block';
-            btnText.innerText = '隱藏明細 ▲';
+            listDiv.style.display = 'table-row';
+            btnText.innerText = '隱藏 ▲';
             btnText.style.color = 'var(--main-brown)';
         } else {
             listDiv.style.display = 'none';
-            btnText.innerText = '點擊顯示明細 ▼';
+            btnText.innerText = '展開 ▼';
             btnText.style.color = '#a8948a';
         }
     }
