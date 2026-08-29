@@ -127,7 +127,7 @@
             flex-shrink: 0;
         }
 
-        input[type="text"], input[type="password"], input[type="date"], select {
+        input[type="text"], input[type="number"], input[type="password"], input[type="date"], select {
             background-color: var(--input-bg);
             border: none; 
             outline: none;
@@ -143,31 +143,57 @@
         .input-med { width: 180px; }
         .input-long { width: 100%; max-width: 400px; }
 
-        .player-row {
+.player-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+    flex-wrap: wrap; 
+}
+
+        .checkbox-label {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-            gap: 10px;
-            flex-wrap: wrap; 
-            background-color: #fdfaf6;
-            padding: 10px;
-            border-radius: 8px;
+            gap: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            color: var(--main-brown);
+            font-weight: bold;
         }
 
-.submit-btn {
-    background-color: var(--main-brown);
-    color: var(--text-light);
-    border: none;
-    padding: 12px 40px;
-    font-size: 1.1em;
-    font-weight: bold;
-    border-radius: 4px;
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.2em;
+    height: 1.2em;
+    background-color: #ffffff; 
+    border: none; /* <--- 改成這樣，邊框就消失了！ */
+    border-radius: 2px;
     cursor: pointer;
-    display: block;
-    margin: 30px auto 0; /* <--- 把這行改成這樣就能完美置中！ */
-    width: 100%; 
-    max-width: 250px; 
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
 }
+
+        input[type="checkbox"]:checked {
+            background-color: var(--main-brown); 
+            border-color: var(--main-brown);
+        }
+
+        .submit-btn {
+            background-color: var(--main-brown);
+            color: var(--text-light);
+            border: none;
+            padding: 12px 40px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0; /* 修改：置中 */
+            width: 100%; 
+            max-width: 250px; 
+        }
 
         .submit-btn:hover {
             background-color: #5c4337;
@@ -265,14 +291,12 @@
             border-left: 3px solid var(--tab-active);
         }
 
-        /* 桌面版專屬的強制不換行設定 */
         .scenario-wrapper {
             display: flex;
             gap: 10px;
-            flex-wrap: nowrap; /* 預設不換行 */
+            flex-wrap: nowrap; 
         }
 
-        /* 手機版排版調整 */
         @media (max-width: 600px) {
             .form-label { width: 100%; margin-bottom: 5px; }
             .input-eq, .input-med, .input-long { width: 100%; max-width: 100%; }
@@ -280,13 +304,12 @@
             .player-row > span { display: none; } 
             .input-short { width: 100%; }
             
-            /* 在手機版取消劇本下拉選單的強制不換行，讓它們可以撐滿寬度 */
             .scenario-wrapper {
                 flex-wrap: wrap; 
                 width: 100%;
             }
             .scenario-wrapper select {
-                width: 100%; /* 讓選單在手機版佔滿整行 */
+                width: 100%; 
             }
         }
     </style>
@@ -307,7 +330,7 @@
         
         <div id="password-gate" class="password-box">
             <h3 style="margin-top: 0; color: var(--main-brown);">團務回報系統</h3>
-            <p style="font-size: 0.85em; margin-bottom: 20px;">本區域僅限 GM 填寫，請輸入您的專屬密碼以解鎖表單</p>
+            <p style="font-size: 0.85em; margin-bottom: 20px;">本區域僅限 GM 填寫，請輸入您的專屬密碼</p>
             <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
                 <input type="password" id="gatePassword" class="input-med" placeholder="請輸入GM密碼" style="background-color: #ffffff;" onkeypress="if(event.key === 'Enter') verifyGMPassword()">
                 <button class="section-title" onclick="verifyGMPassword()">驗證並進入</button>
@@ -321,7 +344,6 @@
                 <input type="date" id="sessionDate" style="width:100%; max-width:180px;">
             </div>
             
-            <!-- 修改：劇本編號的排版 -->
             <div class="form-row">
                 <div class="form-label">劇本編號</div>
                 <div class="scenario-wrapper">
@@ -338,9 +360,16 @@
                 <div class="form-label">GM PFS ID</div>
                 <input type="text" id="gmId" class="input-med" placeholder=" " maxlength="7" pattern="\d*">
             </div>
+
+            <!-- 新增：經驗值欄位 -->
+            <div class="form-row">
+                <div class="form-label">經驗值</div>
+                <input type="number" id="sessionXp" class="input-short" placeholder=" " min="0" step="0.1">
+            </div>
+
             <div class="form-row">
                 <div class="form-label">回報註記</div>
-                <input type="text" id="reportNotes" class="input-long" placeholder="例如：選項A、或積分給角色 -2">
+                <input type="text" id="reportNotes" class="input-long" placeholder="例如：勾選AB、回報給角色2001...等">
             </div>
             
             <input type="hidden" id="verifiedPassword">
@@ -378,18 +407,20 @@
             <div class="form-row" style="margin-bottom: 0; justify-content: center; width: 100%;">
                 <div class="form-label" style="width: auto; margin-right: 10px;">請輸入您的 PFS ID</div>
                 <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content: center;">
-                    <input type="text" id="searchPfsId" class="input-med" placeholder="PFS ID" maxlength="7" style="background-color: #ffffff;" onkeypress="if(event.key === 'Enter') searchRecords()">
+                    <input type="text" id="searchPfsId" class="input-med" placeholder="PFS ID (最多7碼)" maxlength="7" style="background-color: #ffffff;" onkeypress="if(event.key === 'Enter') searchRecords()">
                     <button class="section-title" style="margin:0;" onclick="searchRecords()">查詢</button>
                 </div>
             </div>
         </div>
 
         <div class="dashboard-card" id="search-results" style="display: none;">
-            <h3 style="margin-top:0; display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content: center;">
+            <h3 style="margin-top:0; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                 <span>PFS ID : <span id="res-id"></span></span>
                 <span id="res-milestone-tag" style="display:none; font-size:0.65em; background-color:var(--main-brown); color:white; padding:4px 10px; border-radius:12px; white-space:nowrap;"></span>
             </h3>
-            <div id="stats-container" style="display: flex; flex-direction: column; gap: 15px; margin: 20px 0; align-items: center;"></div>
+            <!-- 修改：移除 center，將統計資訊置左 -->
+            <div id="stats-container" style="display: flex; flex-direction: column; gap: 15px; margin: 20px 0; align-items: flex-start;"></div>
+            
             <div class="section-divider">
                 <div class="section-title" style="margin-top: 0;">參與紀錄</div>
                 <div class="table-responsive">
@@ -428,6 +459,10 @@
             <input type="text" class="input-med" placeholder="PFS ID" maxlength="7" pattern="\\d*">
             <span>-</span>
             <input type="text" class="input-short" placeholder="角色碼 (4碼)" maxlength="4" pattern="\\d*">
+            <!-- 新增：半速遊戲選項 -->
+            <label class="checkbox-label" style="margin-left: 10px;">
+                <input type="checkbox" class="half-speed-cb"> 半速遊戲
+            </label>
         `;
         playersContainer.appendChild(row);
     }
@@ -548,9 +583,10 @@
                     let playersHtml = '';
                     try {
                         const players = JSON.parse(report.players);
-                        playersHtml = players.map(p => `
-                            <div>${p.p_id} - ${p.c_id}</div>
-                        `).join('');
+                        playersHtml = players.map(p => {
+                            let speedTag = p.halfSpeed ? ' <span style="font-size:0.8em; color:#c47b57; font-weight:bold;">(半速)</span>' : '';
+                            return `<div>${p.p_id} - ${p.c_id}${speedTag}</div>`;
+                        }).join('');
                     } catch(e) {}
 
                     const statusHtml = report.status === 'Confirmed' 
@@ -567,7 +603,7 @@
                         <td>${statusHtml}</td>
                         <td>
                             <div style="color: #a8948a; cursor: pointer; user-select: none;" onclick="togglePlayers('plist-${index}')" id="btn-plist-${index}">
-                                點擊顯示明細 ▼
+                                展開 ▼
                             </div>
                         </td>
                     `;
@@ -598,11 +634,11 @@
         const btnText = document.getElementById('btn-' + listId);
         if (listDiv.style.display === 'none') {
             listDiv.style.display = 'table-row';
-            btnText.innerText = '隱藏明細 ▲';
+            btnText.innerText = '隱藏 ▲';
             btnText.style.color = 'var(--main-brown)';
         } else {
             listDiv.style.display = 'none';
-            btnText.innerText = '點擊顯示明細 ▼';
+            btnText.innerText = '展開 ▼';
             btnText.style.color = '#a8948a';
         }
     }
@@ -642,8 +678,10 @@
                     milestoneTag.style.display = 'none';
                 }
                 
+                // 新增累計經驗值，並靠左對齊
                 const statsContainer = document.getElementById('stats-container');
                 statsContainer.innerHTML = `
+                    <div><span class="badge">累計總經驗值</span> <strong style="font-size: 1.2em; color:#c47b57;">${result.totalXP}</strong></div>
                     <div><span class="badge">累計跑團場次</span> <strong style="font-size: 1.2em;">${result.totalCount}</strong></div>
                     <div><span class="badge">累計帶團次數</span> <strong style="font-size: 1.2em;">${result.totalGM}</strong></div>
                 `;
@@ -688,9 +726,10 @@
         const gmId = document.getElementById('gmId').value.trim(); 
         const gmPassword = document.getElementById('verifiedPassword').value; 
         const notes = document.getElementById('reportNotes').value.trim();
+        const sessionXp = parseFloat(document.getElementById('sessionXp').value);
 
-        if (!sessionDate || !gmId || !typeSelect || !numSelect) {
-            return alert("⚠️ 請確實填寫「團務日期」、「劇本類型/編號」與「GM PFS ID」喔！");
+        if (!sessionDate || !gmId || !typeSelect || !numSelect || isNaN(sessionXp)) {
+            return alert("⚠️ 請確實填寫「團務日期」、「劇本類型/編號」、「GM PFS ID」以及「經驗值」喔！");
         }
         
         if (!/^\d{1,7}$/.test(gmId)) {
@@ -706,8 +745,10 @@
 
         playerRows.forEach((row, index) => {
             const inputs = row.querySelectorAll('input[type="text"]');
+            const checkbox = row.querySelector('.half-speed-cb');
             const playerId = inputs[0].value.trim();
             const charCode = inputs[1].value.trim();
+            const isHalfSpeed = checkbox.checked;
 
             if (playerId) {
                 if (!/^\d{1,7}$/.test(playerId)) {
@@ -718,7 +759,7 @@
                     isValid = false;
                     errMsg = `⚠️ 玩家#0${index+1} 的角色碼格式錯誤！必須為 4 碼以內的純數字。`;
                 }
-                players.push({ p_id: playerId, c_id: charCode });
+                players.push({ p_id: playerId, c_id: charCode, halfSpeed: isHalfSpeed });
             }
         });
 
@@ -732,7 +773,8 @@
             gmId: gmId,
             password: gmPassword, 
             players: players,
-            notes: notes
+            notes: notes,
+            sessionXp: sessionXp
         };
 
         const submitBtn = document.querySelector('.submit-btn');
@@ -756,12 +798,15 @@
                 document.getElementById('scenarioTypeSelect').value = '';
                 document.getElementById('scenarioNumSelect').innerHTML = '<option value="">請先選擇類型</option>';
                 document.getElementById('reportNotes').value = ''; 
+                document.getElementById('sessionXp').value = ''; 
                 
                 const playerRows = document.querySelectorAll('.player-row');
                 playerRows.forEach(row => {
                     const inputs = row.querySelectorAll('input[type="text"]');
+                    const checkbox = row.querySelector('.half-speed-cb');
                     inputs[0].value = '';
                     inputs[1].value = '';
+                    checkbox.checked = false;
                 });
             } else {
                 alert("❌ 回報失敗：" + result.message);
