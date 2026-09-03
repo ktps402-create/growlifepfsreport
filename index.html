@@ -9,6 +9,7 @@
             --bg-color: #f7f5f2;
             --main-brown: #7a5a4a;
             --tab-inactive: #b79c8d;
+            --tab-active: #c49a7c;
             --text-dark: #7a5a4a; 
             --text-light: #ffffff;
             --input-bg: #e6e3df;
@@ -88,6 +89,45 @@
             display: block;
         }
 
+        /* 次分頁樣式 (新增) */
+        .sub-tabs {
+            display: flex;
+            align-items: flex-end;
+            border-bottom: 4px solid var(--tab-active); 
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .sub-tab-btn {
+            background-color: var(--tab-inactive);
+            color: var(--text-light);
+            border: none;
+            padding: 8px 15px;
+            font-size: 0.95em;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            transition: 0.3s;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-top: 5px;
+            flex: 1;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .sub-tab-btn.active {
+            background-color: var(--tab-active);
+        }
+
+        .sub-tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .sub-tab-content.active {
+            display: block;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -143,13 +183,13 @@
         .input-med { width: 180px; }
         .input-long { width: 100%; max-width: 400px; }
 
-.player-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    gap: 10px;
-    flex-wrap: wrap; 
-}
+        .player-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+            flex-wrap: wrap; 
+        }
 
         .checkbox-label {
             display: flex;
@@ -161,23 +201,22 @@
             font-weight: bold;
         }
 
-input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 1.2em;
-    height: 1.2em;
-    background-color: #ffffff; 
-    border: none; /* <--- 改成這樣，邊框就消失了！ */
-    border-radius: 2px;
-    cursor: pointer;
-    margin: 0;
-    display: inline-block;
-    vertical-align: middle;
-}
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.2em;
+            height: 1.2em;
+            background-color: #ffffff; 
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            margin: 0;
+            display: inline-block;
+            vertical-align: middle;
+        }
 
         input[type="checkbox"]:checked {
             background-color: var(--main-brown); 
-            border-color: var(--main-brown);
         }
 
         .submit-btn {
@@ -190,7 +229,7 @@ input[type="checkbox"] {
             border-radius: 4px;
             cursor: pointer;
             display: block;
-            margin: 30px auto 0; /* 修改：置中 */
+            margin: 30px auto 0;
             width: 100%; 
             max-width: 250px; 
         }
@@ -257,12 +296,13 @@ input[type="checkbox"] {
         }
 
         tbody tr {
-            background-color: var(--bg-color);
+            background-color: #ffffff;
             transition: all 0.3s ease;
         }
 
-        tbody td:first-child { border-radius: 8px 0 0 8px; }
-        tbody td:last-child { border-radius: 0 8px 8px 0; }
+        tbody tr:hover {
+            background-color: #fdfaf6;
+        }
 
         .section-divider {
             border-top: 2px dashed #d1ccc5;
@@ -321,7 +361,8 @@ input[type="checkbox"] {
 
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'tab-report')">團務回報</button>
-        <button class="tab-btn" onclick="openTab(event, 'tab-history')">本月回報紀錄</button>
+        <!-- 修改：將分頁名稱改為回報紀錄 -->
+        <button class="tab-btn" onclick="openTab(event, 'tab-history')">回報紀錄</button>
         <button class="tab-btn" onclick="openTab(event, 'tab-search')">跑團紀錄查詢</button>
     </div>
 
@@ -330,7 +371,7 @@ input[type="checkbox"] {
         
         <div id="password-gate" class="password-box">
             <h3 style="margin-top: 0; color: var(--main-brown);">團務回報系統</h3>
-            <p style="font-size: 0.85em; margin-bottom: 20px;">本區域僅限 GM 填寫，請輸入您的專屬密碼</p>
+            <p style="font-size: 0.85em; margin-bottom: 20px;">本區域僅限 GM 填寫，請輸入密碼以解鎖表單</p>
             <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
                 <input type="password" id="gatePassword" class="input-med" placeholder="請輸入GM密碼" style="background-color: #ffffff;" onkeypress="if(event.key === 'Enter') verifyGMPassword()">
                 <button class="section-title" onclick="verifyGMPassword()">驗證並進入</button>
@@ -361,7 +402,6 @@ input[type="checkbox"] {
                 <input type="text" id="gmId" class="input-med" placeholder=" " maxlength="7" pattern="\d*">
             </div>
 
-            <!-- 新增：經驗值欄位 -->
             <div class="form-row">
                 <div class="form-label">經驗值</div>
                 <input type="number" id="sessionXp" class="input-short" placeholder=" " min="0" step="0.1">
@@ -369,7 +409,7 @@ input[type="checkbox"] {
 
             <div class="form-row">
                 <div class="form-label">回報註記</div>
-                <input type="text" id="reportNotes" class="input-long" placeholder="例如：勾選AB、回報給角色2001...等">
+                <input type="text" id="reportNotes" class="input-long" placeholder="例如：勾選AC、額外XX勢力+2">
             </div>
             
             <input type="hidden" id="verifiedPassword">
@@ -380,24 +420,52 @@ input[type="checkbox"] {
         </div>
     </div>
 
-    <!-- Tab 2: 本月回報紀錄 -->
+    <!-- Tab 2: 回報紀錄 (已切分為本月/上月) -->
     <div id="tab-history" class="tab-content">
         <div class="dashboard-card">
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>團務日期</th>
-                            <th>GM PFSID</th>
-                            <th>劇本編號</th>
-                            <th>Paizo 回報狀態</th>
-                            <th>玩家編號列表</th>
-                        </tr>
-                    </thead>
-                    <tbody id="history-table-body">
-                    </tbody>
-                </table>
+            
+            <!-- 次分頁切換 -->
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" onclick="openSubTab(event, 'report-this-month', 'front-report-tab')">本月</button>
+                <button class="sub-tab-btn" onclick="openSubTab(event, 'report-last-month', 'front-report-tab')">上月</button>
             </div>
+
+            <div id="report-this-month" class="sub-tab-content active front-report-tab">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>團務日期</th>
+                                <th>GM PFSID</th>
+                                <th>劇本編號</th>
+                                <th style="text-align: center;">Paizo 回報狀態</th>
+                                <th>玩家編號列表</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body-this">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="report-last-month" class="sub-tab-content front-report-tab">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>團務日期</th>
+                                <th>GM PFSID</th>
+                                <th>劇本編號</th>
+                                <th style="text-align: center;">Paizo 回報狀態</th>
+                                <th>玩家編號列表</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body-last">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -407,7 +475,7 @@ input[type="checkbox"] {
             <div class="form-row" style="margin-bottom: 0; justify-content: center; width: 100%;">
                 <div class="form-label" style="width: auto; margin-right: 10px;">請輸入您的 PFS ID</div>
                 <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content: center;">
-                    <input type="text" id="searchPfsId" class="input-med" placeholder="PFS ID (最多7碼)" maxlength="7" style="background-color: #ffffff;" onkeypress="if(event.key === 'Enter') searchRecords()">
+                    <input type="text" id="searchPfsId" class="input-med" placeholder="PFS ID" maxlength="7" style="background-color: #ffffff;" onkeypress="if(event.key === 'Enter') searchRecords()">
                     <button class="section-title" style="margin:0;" onclick="searchRecords()">查詢</button>
                 </div>
             </div>
@@ -418,7 +486,6 @@ input[type="checkbox"] {
                 <span>PFS ID : <span id="res-id"></span></span>
                 <span id="res-milestone-tag" style="display:none; font-size:0.65em; background-color:var(--main-brown); color:white; padding:4px 10px; border-radius:12px; white-space:nowrap;"></span>
             </h3>
-            <!-- 修改：移除 center，將統計資訊置左 -->
             <div id="stats-container" style="display: flex; flex-direction: column; gap: 15px; margin: 20px 0; align-items: flex-start;"></div>
             
             <div class="section-divider">
@@ -431,7 +498,8 @@ input[type="checkbox"] {
                                 <th>GM PFSID</th>
                                 <th>參團角色</th>
                                 <th>劇本編號</th>
-                                <th>Paizo 回報狀態</th>
+                                <th style="text-align: center;">Paizo 回報狀態</th>
+                                <th style="text-align: center;">EXP</th> 
                             </tr>
                         </thead>
                         <tbody id="search-table-body"></tbody>
@@ -458,10 +526,9 @@ input[type="checkbox"] {
             <div class="form-label" style="margin-bottom:0;">玩家#0${i}</div>
             <input type="text" class="input-med" placeholder="PFS ID" maxlength="7" pattern="\\d*">
             <span>-</span>
-            <input type="text" class="input-short" placeholder="角色碼 (4碼)" maxlength="4" pattern="\\d*">
-            <!-- 新增：半速遊戲選項 -->
+            <input type="text" class="input-short" placeholder="(4碼數字)" maxlength="4" pattern="\\d*">
             <label class="checkbox-label" style="margin-left: 10px;">
-                <input type="checkbox" class="half-speed-cb"> 半速遊戲
+                <input type="checkbox" class="half-speed-cb"> 半速
             </label>
         `;
         playersContainer.appendChild(row);
@@ -533,6 +600,24 @@ input[type="checkbox"] {
         }
     }
 
+    // 次分頁切換邏輯
+    window.openSubTab = function(evt, tabName, tabGroupClass) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName(tabGroupClass);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("active");
+        }
+        var parentTabs = evt.currentTarget.parentElement;
+        tablinks = parentTabs.getElementsByClassName("sub-tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.className += " active";
+    }
+
     window.verifyGMPassword = async function() {
         const pwd = document.getElementById('gatePassword').value.trim();
         if (!pwd) return alert('請輸入 GM 專屬密碼！');
@@ -566,67 +651,80 @@ input[type="checkbox"] {
     }
 
     async function loadMonthlyReports() {
-        const tbody = document.getElementById('history-table-body');
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-dark);">資料讀取中... ⏳</td></tr>';
+        const tbodyThis = document.getElementById('history-table-body-this');
+        const tbodyLast = document.getElementById('history-table-body-last');
+        
+        tbodyThis.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-dark);">資料讀取中... ⏳</td></tr>';
+        tbodyLast.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-dark);">資料讀取中... ⏳</td></tr>';
 
         try {
             const response = await fetch(`${GAS_URL}?action=getMonthlyReports`);
             const result = await response.json();
 
             if (result.status === "success") {
-                tbody.innerHTML = "";
-                if (result.reports.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">本月目前尚無回報紀錄</td></tr>';
-                    return;
-                }
-                result.reports.forEach((report, index) => {
-                    let playersHtml = '';
-                    try {
-                        const players = JSON.parse(report.players);
-                        playersHtml = players.map(p => {
-                            let speedTag = p.halfSpeed ? ' <span style="font-size:0.8em; color:#c47b57; font-weight:bold;">(半速)</span>' : '';
-                            return `<div>${p.p_id} - ${p.c_id}${speedTag}</div>`;
-                        }).join('');
-                    } catch(e) {}
-
-                    const statusHtml = report.status === 'Confirmed' 
-                        ? '<span class="status-badge-sm status-confirmed-sm">已回報</span>'
-                        : '<span class="status-badge-sm status-pending-sm">未回報</span>';
-                        
-                    const notesHtml = report.notes ? `<div class="notes-text">備註：${report.notes}</div>` : '';
-
-                    const tr1 = document.createElement('tr');
-                    tr1.innerHTML = `
-                        <td>${report.date}</td>
-                        <td>${report.gmId}</td>
-                        <td>${report.scenarioCode}</td>
-                        <td>${statusHtml}</td>
-                        <td>
-                            <div style="color: #a8948a; cursor: pointer; user-select: none;" onclick="togglePlayers('plist-${index}')" id="btn-plist-${index}">
-                                展開 ▼
-                            </div>
-                        </td>
-                    `;
-                    
-                    const tr2 = document.createElement('tr');
-                    tr2.id = `plist-${index}`;
-                    tr2.style.display = 'none';
-                    tr2.innerHTML = `
-                        <td style="border: none; padding: 0;"></td>
-                        <td colspan="4" style="border: none; padding-top: 0; padding-bottom: 20px; color: var(--text-dark);">
-                            ${notesHtml}
-                            ${playersHtml || '無玩家資料'}
-                        </td>
-                    `;
-                    tbody.appendChild(tr1);
-                    tbody.appendChild(tr2);
-                });
+                renderHistoryTable(result.thisMonth, tbodyThis, '本月');
+                renderHistoryTable(result.lastMonth, tbodyLast, '上月');
             } else {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">讀取失敗：${result.message}</td></tr>`;
+                tbodyThis.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">讀取失敗：${result.message}</td></tr>`;
+                tbodyLast.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">讀取失敗：${result.message}</td></tr>`;
             }
         } catch (error) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">發生錯誤，請檢查網路連線。</td></tr>';
+            tbodyThis.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">發生錯誤，請檢查網路連線。</td></tr>';
+            tbodyLast.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">發生錯誤，請檢查網路連線。</td></tr>';
         }
+    }
+
+    // 渲染歷史紀錄表格的獨立函數
+    function renderHistoryTable(reportsArray, tbodyElement, monthLabel) {
+        tbodyElement.innerHTML = "";
+        if (reportsArray.length === 0) {
+            tbodyElement.innerHTML = `<tr><td colspan="5" style="text-align: center;">${monthLabel}目前尚無回報紀錄</td></tr>`;
+            return;
+        }
+        reportsArray.forEach((report, index) => {
+            let playersHtml = '';
+            try {
+                const players = JSON.parse(report.players);
+                playersHtml = players.map(p => {
+                    let speedText = p.halfSpeed ? ' <span style="font-size:0.8em; color:#c47b57; font-weight:bold;">半速</span>' : '';
+                    return `<div>${p.p_id} - ${p.c_id}${speedText}</div>`;
+                }).join('');
+            } catch(e) {}
+
+            const statusHtml = report.status === 'Confirmed' 
+                ? '<span class="status-badge-sm status-confirmed-sm">已回報</span>'
+                : '<span class="status-badge-sm status-pending-sm">未回報</span>';
+                
+            const notesHtml = report.notes ? `<div class="notes-text">備註：${report.notes}</div>` : '';
+
+            const uniqueId = `plist-${monthLabel === '本月' ? 'this' : 'last'}-${index}`;
+
+            const tr1 = document.createElement('tr');
+            tr1.innerHTML = `
+                <td>${report.date}</td>
+                <td>${report.gmId}</td>
+                <td>${report.scenarioCode}</td>
+                <td style="text-align: center;">${statusHtml}</td>
+                <td>
+                    <div style="color: #a8948a; cursor: pointer; user-select: none;" onclick="togglePlayers('${uniqueId}')" id="btn-${uniqueId}">
+                        顯示 ▼
+                    </div>
+                </td>
+            `;
+            
+            const tr2 = document.createElement('tr');
+            tr2.id = uniqueId;
+            tr2.style.display = 'none';
+            tr2.innerHTML = `
+                <td style="border: none; padding: 0;"></td>
+                <td colspan="4" style="border: none; padding-top: 0; padding-bottom: 20px; color: var(--text-dark);">
+                    ${notesHtml}
+                    ${playersHtml || '無玩家資料'}
+                </td>
+            `;
+            tbodyElement.appendChild(tr1);
+            tbodyElement.appendChild(tr2);
+        });
     }
 
     window.togglePlayers = function(listId) {
@@ -638,7 +736,7 @@ input[type="checkbox"] {
             btnText.style.color = 'var(--main-brown)';
         } else {
             listDiv.style.display = 'none';
-            btnText.innerText = '展開 ▼';
+            btnText.innerText = '顯示 ▼';
             btnText.style.color = '#a8948a';
         }
     }
@@ -678,7 +776,6 @@ input[type="checkbox"] {
                     milestoneTag.style.display = 'none';
                 }
                 
-                // 新增累計經驗值，並靠左對齊
                 const statsContainer = document.getElementById('stats-container');
                 statsContainer.innerHTML = `
                     <div><span class="badge">累計總經驗值</span> <strong style="font-size: 1.2em; color:#c47b57;">${result.totalXP}</strong></div>
@@ -690,12 +787,15 @@ input[type="checkbox"] {
                 tbody.innerHTML = "";
                 
                 if (result.reports.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">目前還沒有找到您的紀錄喔！</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">目前還沒有找到您的紀錄喔！</td></tr>`;
                 } else {
                     result.reports.forEach(report => {
                         const statusHtml = report.status === 'Confirmed' 
                             ? '<span class="status-badge-sm status-confirmed-sm">已回報</span>'
                             : '<span class="status-badge-sm status-pending-sm">未回報</span>';
+
+                        const expDisplay = report.characterId === 'GM' ? '-' : report.earnedXP;
+                        const halfSpeedMark = report.halfSpeed ? '✔️' : '';
 
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
@@ -703,7 +803,8 @@ input[type="checkbox"] {
                             <td>${report.gmId}</td>
                             <td>${report.characterId}</td>
                             <td>${report.scenarioCode}</td>
-                            <td>${statusHtml}</td>
+                            <td style="text-align: center;">${statusHtml}</td>
+                            <td style="text-align: center; color: var(--main-brown); font-weight: bold;">${expDisplay}</td>
                         `;
                         tbody.appendChild(tr);
                     });
