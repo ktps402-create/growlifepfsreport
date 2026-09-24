@@ -89,7 +89,7 @@
             display: block;
         }
 
-        /* 次分頁樣式 (新增) */
+        /* 次分頁樣式 */
         .sub-tabs {
             display: flex;
             align-items: flex-end;
@@ -361,7 +361,6 @@
 
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'tab-report')">團務回報</button>
-        <!-- 修改：將分頁名稱改為回報紀錄 -->
         <button class="tab-btn" onclick="openTab(event, 'tab-history')">回報紀錄</button>
         <button class="tab-btn" onclick="openTab(event, 'tab-search')">跑團紀錄查詢</button>
     </div>
@@ -420,11 +419,10 @@
         </div>
     </div>
 
-    <!-- Tab 2: 回報紀錄 (已切分為本月/上月) -->
+    <!-- Tab 2: 回報紀錄 -->
     <div id="tab-history" class="tab-content">
         <div class="dashboard-card">
             
-            <!-- 次分頁切換 -->
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" onclick="openSubTab(event, 'report-this-month', 'front-report-tab')">本月</button>
                 <button class="sub-tab-btn" onclick="openSubTab(event, 'report-last-month', 'front-report-tab')">上月</button>
@@ -600,7 +598,6 @@
         }
     }
 
-    // 次分頁切換邏輯
     window.openSubTab = function(evt, tabName, tabGroupClass) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName(tabGroupClass);
@@ -674,7 +671,6 @@
         }
     }
 
-    // 渲染歷史紀錄表格的獨立函數
     function renderHistoryTable(reportsArray, tbodyElement, monthLabel) {
         tbodyElement.innerHTML = "";
         if (reportsArray.length === 0) {
@@ -686,7 +682,8 @@
             try {
                 const players = JSON.parse(report.players);
                 playersHtml = players.map(p => {
-                    let speedText = p.halfSpeed ? ' <span style="font-size:0.8em; color:#c47b57; font-weight:bold;">半速</span>' : '';
+                    const isHalf = p.halfSpeed === true || p.halfSpeed === "true";
+                    let speedText = isHalf ? ' <span style="font-size:0.85em; color:#c47b57; font-weight:bold;">(半速)</span>' : '';
                     return `<div>${p.p_id} - ${p.c_id}${speedText}</div>`;
                 }).join('');
             } catch(e) {}
@@ -795,7 +792,6 @@
                             : '<span class="status-badge-sm status-pending-sm">未回報</span>';
 
                         const expDisplay = report.characterId === 'GM' ? '-' : report.earnedXP;
-                        const halfSpeedMark = report.halfSpeed ? '✔️' : '';
 
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
